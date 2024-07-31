@@ -6,9 +6,6 @@ import {
   Avatar, 
   Greeting, 
   NotificationButton, 
-  SearchBar, 
-  SearchButton, 
-  SearchInput, 
   SpecialOffer, 
   Categories, 
   CategoryButton, 
@@ -24,6 +21,7 @@ import {
   Footer 
 } from '../../styles/homeStyle';
 import NavButton from '../../components/NavButton/NavButton';
+import SearchBar from '../../components/SearchBar/SearchBar';
 
 const HomeScreen: React.FC = () => {
   return (
@@ -35,12 +33,7 @@ const HomeScreen: React.FC = () => {
           <Text>🔔</Text>
         </NotificationButton>
       </Header>
-      <SearchBar>
-        <SearchInput placeholder="Search Coffee..." />
-        <SearchButton>
-          <Text>🔍</Text>
-        </SearchButton>
-      </SearchBar>
+      <SearchBar />
       <Categories>
         <CategoryButton active={true}>
           <Text>Cappuccino</Text>
