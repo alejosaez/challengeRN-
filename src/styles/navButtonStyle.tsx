@@ -1,8 +1,7 @@
 import styled from 'styled-components/native';
 import { TouchableOpacity } from 'react-native';
-
 interface NavButtonProps {
-    active?: boolean;
+ active?: boolean;
 }
 
 export const NavButtonContainer = styled(TouchableOpacity) <NavButtonProps>`

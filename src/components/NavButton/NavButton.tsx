@@ -1,5 +1,7 @@
 import React from 'react';
-import { NavContainer, NavButtonContainer, NavButtonText } from '../../styles/navButtonStyle';
+import { NavContainer,
+  NavButtonContainer,
+  NavButtonText } from '../../styles/navButtonStyle';
 
 interface NavButtonProps {
   active?: boolean;
