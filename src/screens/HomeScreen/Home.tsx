@@ -1,28 +1,39 @@
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, ScrollView } from 'react-native';
-import { 
-  Container, 
-  Header, 
-  Avatar, 
-  Greeting, 
-  NotificationButton, 
-  SpecialOffer, 
-  CategoryButton, 
-  Product, 
-  ProductImage, 
-  ProductName, 
-  ProductPrice, 
-  Products, 
-  AddButton, 
-  Offer, 
-  OfferText, 
-  OfferTitle, 
-  Footer 
+import { ScrollView, Text, TouchableOpacity } from 'react-native';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { RootStackParamList } from '../../../App'; // Asegúrate de importar RootStackParamList desde tu App.tsx
+import {
+  Container,
+  Header,
+  Avatar,
+  Greeting,
+  NotificationButton,
+  SpecialOffer,
+  Products,
+  Product,
+  ProductImage,
+  ProductName,
+  ProductPrice,
+  AddButton,
+  Offer,
+  OfferText,
+  OfferTitle,
 } from '../../styles/homeStyle';
 import NavButton from '../../components/NavButton/NavButton';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import Categories from '../../components/Category/Category';
+import { fetchProductDetails } from '../../Redux/reducer/productReducer/productReducer';
+import { useAppDispatch } from '../../Redux/reduxHook';
+
 const HomeScreen: React.FC = () => {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const dispatch = useAppDispatch();
+
+  const handleProductPress = (productId: string) => {
+    dispatch(fetchProductDetails(productId));
+    navigation.navigate('Item', { productId });
+  };
+
   return (
     <Container>
       <Header>
@@ -36,22 +47,26 @@ const HomeScreen: React.FC = () => {
       <Categories />
       <ScrollView>
         <Products>
-          <Product>
-            <ProductImage source={{ uri: 'https://perfectdailygrind.com/es/wp-content/uploads/sites/2/2019/11/cofee.jpg' }} />
-            <ProductName>Cappuccino with chocolate</ProductName>
-            <ProductPrice>$4.16</ProductPrice>
-            <AddButton>
-              <Text>+</Text>
-            </AddButton>
-          </Product>
-          <Product>
-            <ProductImage source={{ uri: 'https://via.placeholder.com/150' }} />
-            <ProductName>Cappuccino with chocolate and milk</ProductName>
-            <ProductPrice>$5.42</ProductPrice>
-            <AddButton>
-              <Text>+</Text>
-            </AddButton>
-          </Product>
+          <TouchableOpacity onPress={() => handleProductPress('1')}>
+            <Product>
+              <ProductImage source={{ uri: 'https://via.placeholder.com/150' }} />
+              <ProductName>Cappuccino with chocolate</ProductName>
+              <ProductPrice>$4.16</ProductPrice>
+              <AddButton>
+                <Text>+</Text>
+              </AddButton>
+            </Product>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleProductPress('2')}>
+            <Product>
+              <ProductImage source={{ uri: 'https://via.placeholder.com/150' }} />
+              <ProductName>Cappuccino with chocolate and milk</ProductName>
+              <ProductPrice>$5.42</ProductPrice>
+              <AddButton>
+                <Text>+</Text>
+              </AddButton>
+            </Product>
+          </TouchableOpacity>
         </Products>
         <SpecialOffer>
           <OfferTitle>Special Offer 🔥</OfferTitle>
@@ -62,7 +77,7 @@ const HomeScreen: React.FC = () => {
           </Offer>
         </SpecialOffer>
       </ScrollView>
-    <NavButton/>
+      <NavButton />
     </Container>
   );
 };
