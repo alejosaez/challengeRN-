@@ -7,7 +7,6 @@ import {
   Greeting, 
   NotificationButton, 
   SpecialOffer, 
-  Categories, 
   CategoryButton, 
   Product, 
   ProductImage, 
@@ -22,7 +21,7 @@ import {
 } from '../../styles/homeStyle';
 import NavButton from '../../components/NavButton/NavButton';
 import SearchBar from '../../components/SearchBar/SearchBar';
-
+import Categories from '../../components/Category/Category';
 const HomeScreen: React.FC = () => {
   return (
     <Container>
@@ -34,21 +33,11 @@ const HomeScreen: React.FC = () => {
         </NotificationButton>
       </Header>
       <SearchBar />
-      <Categories>
-        <CategoryButton active={true}>
-          <Text>Cappuccino</Text>
-        </CategoryButton>
-        <CategoryButton>
-          <Text>Cold Brew</Text>
-        </CategoryButton>
-        <CategoryButton>
-          <Text>Espresso</Text>
-        </CategoryButton>
-      </Categories>
+      <Categories />
       <ScrollView>
         <Products>
           <Product>
-            <ProductImage source={{ uri: 'https://via.placeholder.com/150' }} />
+            <ProductImage source={{ uri: 'https://perfectdailygrind.com/es/wp-content/uploads/sites/2/2019/11/cofee.jpg' }} />
             <ProductName>Cappuccino with chocolate</ProductName>
             <ProductPrice>$4.16</ProductPrice>
             <AddButton>
