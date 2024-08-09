@@ -3,15 +3,14 @@ import { TouchableOpacity } from 'react-native';
 
 export const Products = styled.View`
   flex-direction: row;
-  justify-content: space-between; /* Asegura que las tarjetas se distribuyan equitativamente */
-  flex-wrap: wrap;       /* Permite que las tarjetas pasen a la siguiente fila si no caben en una */
+  justify-content: space-between; 
+  flex-wrap: wrap;       
   padding: 10px 15px;
 `;
 
 export const Product = styled.View`
-  width: 48%;             /* Asegura que dos productos quepan en una fila */
+  width: 48%;             
   align-items: center;
-  justify-content: space-between;
   padding: 10px;
   background-color: #fff;
   border-radius: 20px;
@@ -28,23 +27,32 @@ export const ProductImage = styled.Image`
 `;
 
 export const ProductDetails = styled.View`
-  padding: 10px;
-  align-items: center;
   flex: 1;
+  width: 100%;              
+  padding: 10px;
+  justify-content: center;  
 `;
 
 export const ProductName = styled.Text`
   font-size: 18px;
   font-weight: bold;
   text-align: center;
-  margin-top: 10px;
+  margin-bottom: 5px;
 `;
 
 export const ProductDescription = styled.Text`
   font-size: 14px;
   color: #999;
   text-align: center;
-  margin: 5px 0;
+  margin-bottom: 10px;
+`;
+
+export const ProductFooter = styled.View`
+  flex-direction: row;        /* Alinea el precio y el botón en una fila */
+  justify-content: space-between; /* Espacio entre el precio y el botón */
+  align-items: center;
+  width: 100%;
+  padding-top: 10px;
 `;
 
 export const ProductPrice = styled.Text`
@@ -54,12 +62,11 @@ export const ProductPrice = styled.Text`
 `;
 
 export const AddButton = styled(TouchableOpacity)`
-  padding: 10px 15px;
+  padding: 5px;            
   background-color: #00a680;
-  border-radius: 50px;
+  border-radius: 15px;     
   justify-content: center;
   align-items: center;
-  margin-top: 10px;
-  width: 50px;
-  height: 50px;
+  width: 30px;             
+  height: 30px;            
 `;

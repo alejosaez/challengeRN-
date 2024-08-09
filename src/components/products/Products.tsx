@@ -8,8 +8,9 @@ import {
   ProductDescription,
   ProductPrice,
   AddButton,
-  ProductDetails
-} from'../../styles/productsStyle';
+  ProductDetails,
+  ProductFooter
+} from '../../styles/productsStyle';
 
 const Products: React.FC = () => {
   return (
@@ -19,22 +20,26 @@ const Products: React.FC = () => {
         <ProductDetails>
           <ProductName>Cappuccino</ProductName>
           <ProductDescription>with chocolate</ProductDescription>
-          <ProductPrice>$4.16</ProductPrice>
+          <ProductFooter>
+            <ProductPrice>$4.16</ProductPrice>
+            <AddButton>
+              <Text>+</Text>
+            </AddButton>
+          </ProductFooter>
         </ProductDetails>
-        <AddButton>
-          <Text>+</Text>
-        </AddButton>
       </Product>
       <Product>
         <ProductImage source={{ uri: 'https://s3-alpha-sig.figma.com/img/fcf7/d5cf/a03d93d08461628ba2b0ea2d070a2a8e?Expires=1724025600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=f-nCWCSgNgjMPJbaMTZRuvLtoI-iruCmMTv40~kjQSKpck~QHyVw7vnEQgK4TDOu7Ieetqa-kgzuRYFHPGjMqRLCxiCKor6ZDSL~dqPIqDUGf3gZm8j2cyWRCPNJwLL4d9EnJgvEMZkJ5tKJ9o94w-urulLGcIHEgVUOMeHpnAp-r70HQuTkzCydqduKeP5I7Xq9TqohL2KnGIn8WQyYY1WtMelk~JCs3AYm9wg99pe0Sc3ct-UPPTXuun-zbK~X1bx5md7mq3e48Ve2pxZZ8-DJ2Z1hdM2faJ-BLj2jvymGiRs1aWtgWSan8pMhywcvxLoWz-yE85bLBosisHdnhw__' }} />
         <ProductDetails>
           <ProductName>Cappuccino</ProductName>
           <ProductDescription>with chocolate and milk</ProductDescription>
-          <ProductPrice>$5.42</ProductPrice>
+          <ProductFooter>
+            <ProductPrice>$5.42</ProductPrice>
+            <AddButton>
+              <Text>+</Text>
+            </AddButton>
+          </ProductFooter>
         </ProductDetails>
-        <AddButton>
-          <Text>+</Text>
-        </AddButton>
       </Product>
     </ProductsContainer>
   );
