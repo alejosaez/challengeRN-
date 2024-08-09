@@ -1,6 +1,5 @@
 import styled from 'styled-components/native';
 import { TouchableOpacity } from 'react-native';
-import { SvgProps } from 'react-native-svg';
 
 interface NavButtonProps {
   active?: boolean;
@@ -9,6 +8,7 @@ interface NavButtonProps {
 export const NavButtonContainer = styled(TouchableOpacity)<NavButtonProps>`
   justify-content: center;
   align-items: center;
+  padding: 10px;
 `;
 
 export const NavButtonText = styled.Text<NavButtonProps>`
@@ -20,6 +20,8 @@ export const NavButtonText = styled.Text<NavButtonProps>`
 
 export const NavIcon = styled.View<NavButtonProps>`
   margin-bottom: 3px;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const NavContainer = styled.View`
