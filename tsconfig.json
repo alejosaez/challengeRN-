@@ -1,3 +1,9 @@
 {
-  "extends": "@react-native/typescript-config/tsconfig.json"
+  "extends": "@react-native/typescript-config/tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react",  // Permite que TypeScript compile JSX
+    "esModuleInterop": true,  // Habilita la interoperabilidad entre módulos ES y CommonJS
+    "allowSyntheticDefaultImports": true,  // Permite importaciones de módulos sin necesidad de usar `import * as`
+    "skipLibCheck": true  // Omite la comprobación de tipo en archivos de declaración
+  }
 }
