@@ -22,8 +22,8 @@ export const Product = styled.View`
 export const ProductImage = styled.Image`
   width: 100%;
   height: 150px;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
+  border-radius: 20px;  
+  overflow: hidden;     
 `;
 
 export const ProductDetails = styled.View`
@@ -48,8 +48,8 @@ export const ProductDescription = styled.Text`
 `;
 
 export const ProductFooter = styled.View`
-  flex-direction: row;        /* Alinea el precio y el botón en una fila */
-  justify-content: space-between; /* Espacio entre el precio y el botón */
+  flex-direction: row;        
+  justify-content: space-between;
   align-items: center;
   width: 100%;
   padding-top: 10px;
