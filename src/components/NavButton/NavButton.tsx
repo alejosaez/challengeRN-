@@ -6,7 +6,7 @@ import CartIcon from '../../assets/icons/CartIcon.svg';
 import ProfileIcon from '../../assets/icons/ProfileIcon.svg';
 
 import { 
-  NavContainer, 
+  NavContainer,  
   NavButtonContainer, 
   NavButtonText, 
   NavIcon 
@@ -19,10 +19,12 @@ interface NavButtonProps {
 }
 
 const NavButton: React.FC<NavButtonProps> = ({ active, icon: Icon, children }) => {
+  const color = active ? '#00512D' : '#A5A5A5';
+
   return (
     <NavButtonContainer active={active}>
       <NavIcon>
-        <Icon width={24} height={24} fill={active ? '#00512D' : '#A5A5A5'} />
+        <Icon width={24} height={24} fill={color} />
       </NavIcon>
       <NavButtonText active={active}>{children}</NavButtonText>
     </NavButtonContainer>

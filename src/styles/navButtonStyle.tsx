@@ -22,8 +22,9 @@ export const NavIcon = styled.View<NavButtonProps>`
   margin-bottom: 3px;
   justify-content: center;
   align-items: center;
+  width: 24px; /* Ajusta según el tamaño del ícono */
+  height: 24px; /* Ajusta según el tamaño del ícono */
 `;
-
 export const NavContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
