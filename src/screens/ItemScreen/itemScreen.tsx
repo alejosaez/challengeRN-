@@ -26,7 +26,7 @@ import { RootState } from '../../Redux/store/store';
 const ItemScreen: React.FC = () => {
   const route = useRoute<RouteProp<RootStackParamList, 'Item'>>();
   const { productId } = route.params;
-  const productDetails = useAppSelector((state: RootState) => state.product.productDetails);
+  // const productDetails = useAppSelector((state: RootState) => state.product.productDetails);
 
   return (
     <Container>
