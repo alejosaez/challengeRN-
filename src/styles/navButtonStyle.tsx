@@ -1,30 +1,32 @@
 import styled from 'styled-components/native';
 import { TouchableOpacity } from 'react-native';
+import { SvgProps } from 'react-native-svg';
 
 interface NavButtonProps {
   active?: boolean;
 }
 
 export const NavButtonContainer = styled(TouchableOpacity)<NavButtonProps>`
-  padding: 10px;
+  justify-content: center;
   align-items: center;
-  ${({ active }) => active && `
-    border-bottom-width: 2px; 
-    border-color: #000;
-  `}
 `;
 
 export const NavButtonText = styled.Text<NavButtonProps>`
-  font-size: 12px;
-  color: ${({ active }) => (active ? '#000' : '#888')};
+  font-size: 14px;
+  color: ${({ active }) => (active ? '#00512D' : '#A5A5A5')}; /* Verde cuando activo, gris cuando inactivo */
+  font-weight: bold;
   margin-top: 5px;
+`;
+
+export const NavIcon = styled.View<NavButtonProps>`
+  margin-bottom: 3px;
 `;
 
 export const NavContainer = styled.View`
   flex-direction: row;
-  justify-content: space-around;
-  background-color: #f8f8f8;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
   padding: 10px 0;
-  border-top-width: 1px;
-  border-color: #e0e0e0;
+  background-color: #ffffff;
 `;
