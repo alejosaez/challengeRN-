@@ -1,8 +1,8 @@
 import React from 'react';
 // import { NavigationContainer } from '@react-navigation/native';
 // import { createStackNavigator } from '@react-navigation/stack';
-// import { Provider } from 'react-redux';
-// import store from '../ChalengeRM/src/Redux/store/store';
+import { Provider } from 'react-redux';
+import store from '../ChalengeRM/src/Redux/store/store';
 import HomeScreen from '../ChalengeRM/src/screens/HomeScreen/Home'
 // import ItemScreen from '../ChalengeRM/src/screens/ItemScreen/itemScreen'
 
@@ -15,7 +15,9 @@ import HomeScreen from '../ChalengeRM/src/screens/HomeScreen/Home'
 
 const App: React.FC = () => {
   return (
-    <HomeScreen />
+    <Provider store={store}>
+      <HomeScreen />
+    </Provider>
     // <Provider store={store}>
     //   <NavigationContainer>
     //     <Stack.Navigator>

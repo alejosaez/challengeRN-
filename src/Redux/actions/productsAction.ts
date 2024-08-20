@@ -19,10 +19,11 @@ export const getProducts = createAsyncThunk<Product[]>(
   'product/getProducts',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get('http://localhost:3001/api/products')
-      return response.data
+      const response = await axios.get('http://10.0.2.2:3001/api/products'); 
+      console.log("Solicitud recibida en /api/products ",response.data); 
+      return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response.data)
+      return rejectWithValue(error.response.data);
     }
-  },
-)
+  }
+);
