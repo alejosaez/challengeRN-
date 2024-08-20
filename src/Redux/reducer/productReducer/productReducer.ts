@@ -1,45 +1,32 @@
-// import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Product, ProductState } from '../../types/products/productsTypes';
+import { getProducts } from '../../actions/productsAction';
 
-// export const fetchProductDetails = createAsyncThunk(
-//   'product/fetchProductDetails',
-//   async (productId: string) => {
-//     const response = await fetch(`https://api.example.com/products/${productId}`);
-//     const data = await response.json();
-//     return data;
-//   }
-// );
-
-// interface ProductState {
-//   loading: boolean;
-//   productDetails: any;
-//   error: string;
-// }
-
-// const initialState: ProductState = {
-//   loading: false,
-//   productDetails: {},
-//   error: ''
-// };
-
-// const productSlice = createSlice({
-//   name: 'product',
-//   initialState,
-//   reducers: {},
-//   extraReducers: (builder) => {
-//     builder
-//       .addCase(fetchProductDetails.pending, (state) => {
-//         state.loading = true;
-//         state.error = '';
-//       })
-//       .addCase(fetchProductDetails.fulfilled, (state, action) => {
-//         state.loading = false;
-//         state.productDetails = action.payload;
-//       })
-//       .addCase(fetchProductDetails.rejected, (state, action) => {
-//         state.loading = false;
-//         state.error = action.error.message || 'Failed to fetch product details';
-//       });
-//   }
-// });
-
-// export default productSlice.reducer;
+const initialState: ProductState = {
+    allProducts: [],  
+    loading: false,
+    error: null,
+  };
+  
+  const productSlice = createSlice({
+    name: 'product',
+    initialState,
+    reducers: {},
+    extraReducers: (builder) => {
+      builder
+        .addCase(getProducts.pending, (state) => {
+          state.loading = true;
+          state.error = null;
+        })
+        .addCase(getProducts.fulfilled, (state, action: PayloadAction<Product[]>) => {
+          state.loading = false;
+          state.allProducts = action.payload;  
+        })
+        .addCase(getProducts.rejected, (state, action) => {
+          state.loading = false;
+          state.error = action.payload as string;
+        });
+    },
+  });
+  
+  export default productSlice.reducer;
