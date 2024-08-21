@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Product, ProductState } from '../../types/products/productsTypes';
-import { getProducts } from '../../actions/productsAction';
+import { getProducts,getProductsById } from '../../actions/productsAction';
 
 const initialState: ProductState = {
-    allProducts: [],  
+    allProducts: [], 
+    product: null, 
     loading: false,
     error: null,
   };
@@ -25,6 +26,18 @@ const initialState: ProductState = {
         .addCase(getProducts.rejected, (state, action) => {
           state.loading = false;
           state.error = action.payload as string;
+        })
+        .addCase(getProductsById.pending, (state) => {
+          state.loading = true;
+          state.error = null;
+        })
+        .addCase(getProductsById.fulfilled, (state, action: PayloadAction<Product>) => {
+          state.loading = false;
+          state.product = action.payload; 
+        })
+        .addCase(getProductsById.rejected, (state, action: PayloadAction<any>) => {
+          state.loading = false;
+          state.error = action.payload;
         });
     },
   });

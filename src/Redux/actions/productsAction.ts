@@ -8,7 +8,7 @@ export const createProduct = createAsyncThunk<
   CreateProductData
 >('product/createProduct', async (productData, { rejectWithValue }) => {
   try {
-    const response = await axios.post('http://localhost:3001/api/products', productData)
+    const response = await axios.post('http://10.0.2.2:3001/api/products', productData)
     return response.data
   } catch (error: any) {
     return rejectWithValue(error.response.data)
@@ -27,3 +27,18 @@ export const getProducts = createAsyncThunk<Product[]>(
     }
   }
 );
+
+
+export const getProductsById = createAsyncThunk<Product, string>(
+  'product/getProductsById',
+  async (productId, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`http://10.0.2.2:3001/api/products/${productId}`);
+      console.log("Solicitud recibida en /api/products/:id", response.data);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+

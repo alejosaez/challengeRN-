@@ -2,10 +2,9 @@ import styled from 'styled-components/native';
 import { TouchableOpacity } from 'react-native';
 
 export const Products = styled.View`
-  flex-direction: row;
-  justify-content: space-between; 
+  
   flex-wrap: wrap;       
-  padding: 10px 15px;
+
 `;
 
 export const Product = styled.View`
