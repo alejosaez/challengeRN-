@@ -5,7 +5,7 @@ import { useAppSelector } from '../../Redux/reduxHook';
 import { RootState, AppDispatch } from '../../Redux/store/store';
 import { getProducts } from '../../Redux/actions/productsAction';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
-import { RootStackParamList } from '../../../App'; // Asegúrate de que la ruta sea correcta
+import { RootStackParamList } from '../../../App'; 
 import {
   Products as ProductsContainer,
   Product,
@@ -20,7 +20,7 @@ import {
 
 const Products: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>(); // Tipado correcto de useNavigation
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>(); 
   const { allProducts, loading, error } = useAppSelector((state: RootState) => state.product);
 
   useEffect(() => {
@@ -40,7 +40,7 @@ const Products: React.FC = () => {
       {allProducts.map(product => (
         <TouchableOpacity
           key={product.product_id}
-          onPress={() => navigation.navigate('Item', { productId: product.product_id })} // Navega a la pantalla del producto
+          onPress={() => navigation.navigate('Item', { productId: product.product_id })} 
         >
           <Product>
             <ProductImage 

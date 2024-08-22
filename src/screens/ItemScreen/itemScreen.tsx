@@ -29,15 +29,14 @@ const ItemScreen: React.FC = () => {
   const { productId } = route.params;
   const dispatch = useAppDispatch();
 
-  // Despacha la acción para obtener los detalles del producto
+ 
   useEffect(() => {
     dispatch(getProductsById(productId));
   }, [dispatch, productId]);
 
-  // Obtiene los detalles del producto desde el store
   const productDetails = useAppSelector((state: RootState) => state.product.product);
 
-  // Si los detalles del producto están cargando o no están disponibles, muestra un mensaje
+
   if (!productDetails) {
     return (
       <Container>
@@ -51,7 +50,7 @@ const ItemScreen: React.FC = () => {
       <ScrollView>
         <ProductImage
           source={{
-            uri: productDetails.image_url, // Usa la URL de la imagen del producto
+            uri: productDetails.image_url,
           }}
         />
         <ProductInfo>
