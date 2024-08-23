@@ -20,6 +20,8 @@ import SearchBar from '../../components/SearchBar/SearchBar';
 import Categories from '../../components/Category/Category';
 import Products from '../../components/products/Products';
 import { RootStackParamList } from '../../../App'
+import { LoginButton } from '../../auth0/loginButton';
+
 const HomeScreen: React.FC = () => {
   const dispatch = useAppDispatch();
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
@@ -47,6 +49,7 @@ const HomeScreen: React.FC = () => {
       <Header>
         <Avatar source={{ uri: 'https://via.placeholder.com/40' }} />
         <Greeting>Good evening, Monica</Greeting>
+        <LoginButton/>
         <NotificationButton>
           <Text>🔔</Text>
         </NotificationButton>
