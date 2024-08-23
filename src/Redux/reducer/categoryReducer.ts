@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { getCategory } from '../actions/categoriesAction'; // Asegúrate de que la ruta es correcta
+import { getCategory } from '../actions/categoriesAction';
 import { CategoriesResponse, CategoryState } from '../types/category/categoriesTypes';
 
 const initialState: CategoryState = {
-  allCategories: [],  // Cambiado de 'categories' a 'allCategories'
+  allCategories: [],
   loading: false,
   error: null,
 };
@@ -19,7 +19,7 @@ const categorySlice = createSlice({
         state.error = null;
       })
       .addCase(getCategory.fulfilled, (state, action: PayloadAction<CategoriesResponse>) => {
-        state.allCategories = action.payload;  // Actualizado para usar 'allCategories'
+        state.allCategories = action.payload;  
         state.loading = false;
       })
       .addCase(getCategory.rejected, (state, action: PayloadAction<string | undefined>) => {

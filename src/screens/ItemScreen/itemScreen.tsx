@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, Text } from 'react-native';
 import {
   Container,
@@ -10,9 +10,6 @@ import {
   RatingText,
   Section,
   SectionTitle,
-  SizeOptions,
-  SizeButton,
-  SizeButtonText,
   AboutText,
   AddToCartButton,
   AddToCartText,
@@ -23,19 +20,20 @@ import { useAppSelector, useAppDispatch } from '../../Redux/reduxHook';
 import { RootStackParamList } from '../../../App';
 import { getProductsById } from '../../Redux/actions/productsAction';
 import { RootState } from '../../Redux/store/store';
+import SizeSelector from '../../components/SizeSelector/SizeSelector';  
 
 const ItemScreen: React.FC = () => {
   const route = useRoute<RouteProp<RootStackParamList, 'Item'>>();
   const { productId } = route.params;
   const dispatch = useAppDispatch();
 
- 
+  const [selectedSizeIndex, setSelectedSizeIndex] = useState(0);
+
   useEffect(() => {
     dispatch(getProductsById(productId));
   }, [dispatch, productId]);
 
   const productDetails = useAppSelector((state: RootState) => state.product.product);
-
 
   if (!productDetails) {
     return (
@@ -44,6 +42,9 @@ const ItemScreen: React.FC = () => {
       </Container>
     );
   }
+
+  const selectedSize = productDetails.Sizes[selectedSizeIndex];
+  const totalPrice = productDetails.unit_price + selectedSize.additional_price;
 
   return (
     <Container>
@@ -62,13 +63,11 @@ const ItemScreen: React.FC = () => {
           </Rating>
           <Section>
             <SectionTitle>Coffee Size</SectionTitle>
-            <SizeOptions>
-              {productDetails.Sizes.map((size, index) => (
-                <SizeButton key={index} selected={index === 0}>
-                  <SizeButtonText selected={index === 0}>{size.name}</SizeButtonText>
-                </SizeButton>
-              ))}
-            </SizeOptions>
+            <SizeSelector 
+              sizes={productDetails.Sizes} 
+              selectedSizeIndex={selectedSizeIndex} 
+              onSizeSelect={setSelectedSizeIndex} 
+            />
           </Section>
           <Section>
             <SectionTitle>About</SectionTitle>
@@ -80,7 +79,7 @@ const ItemScreen: React.FC = () => {
           </Section>
           <AddToCartButton>
             <AddToCartText>Add to cart</AddToCartText>
-            <PriceText>${productDetails.unit_price}</PriceText>
+            <PriceText>${totalPrice.toFixed(2)}</PriceText>
           </AddToCartButton>
         </ProductInfo>
       </ScrollView>
