@@ -33,10 +33,9 @@ const CreateProduct: React.FC<CreateProductProps> = ({ onSave }) => {
   const [description, setDescription] = useState('')
   const [imageUrl, setImageUrl] = useState('')
   const [categoryId, setCategoryId] = useState('')
-  const [selectedSizes, setSelectedSizes] = useState<string[]>([]) // Estado para múltiples tamaños seleccionados
+  const [selectedSizes, setSelectedSizes] = useState<string[]>([])
   const [combinations, setCombinations] = useState<string[]>([])
-  const [selectedCombination, setSelectedCombination] = useState<string>('') // Estado para la combinación seleccionada
-
+  const [selectedCombination, setSelectedCombination] = useState<string>('')
   const handleAddProduct = async () => {
     if (!name || !unitPrice) {
       Alert.alert('Error', 'Please provide both name and unit price.')
@@ -49,7 +48,7 @@ const CreateProduct: React.FC<CreateProductProps> = ({ onSave }) => {
         description,
         image_url: imageUrl,
         category_id: categoryId,
-        sizes: selectedSizes, // Añadir tamaños seleccionados
+        sizes: selectedSizes,
         combinations,
       }
       await dispatch(createProduct(newProduct)).unwrap()
@@ -76,14 +75,16 @@ const CreateProduct: React.FC<CreateProductProps> = ({ onSave }) => {
 
   const toggleSizeSelection = (sizeId: string) => {
     if (selectedSizes.includes(sizeId)) {
-      setSelectedSizes(selectedSizes.filter(id => id !== sizeId)) // Eliminar tamaño si ya está seleccionado
+      setSelectedSizes(selectedSizes.filter(id => id !== sizeId))
     } else {
-      setSelectedSizes([...selectedSizes, sizeId]) // Agregar tamaño si no está seleccionado
+      setSelectedSizes([...selectedSizes, sizeId])
     }
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollViewContent} keyboardShouldPersistTaps="handled">
+    <ScrollView
+      contentContainerStyle={styles.scrollViewContent}
+      keyboardShouldPersistTaps="handled">
       <View style={styles.container}>
         <TextInput
           style={styles.input}
@@ -111,7 +112,6 @@ const CreateProduct: React.FC<CreateProductProps> = ({ onSave }) => {
           placeholder="Image URL"
         />
 
-        {/* Selector de categoría */}
         <Picker
           selectedValue={categoryId}
           onValueChange={itemValue => setCategoryId(itemValue)}
@@ -126,7 +126,6 @@ const CreateProduct: React.FC<CreateProductProps> = ({ onSave }) => {
           ))}
         </Picker>
 
-        {/* Selector múltiple de tamaños */}
         <View style={styles.sizeContainer}>
           <Text>Select Sizes:</Text>
           {sizesList.map(size => (
@@ -142,7 +141,6 @@ const CreateProduct: React.FC<CreateProductProps> = ({ onSave }) => {
           ))}
         </View>
 
-        {/* Selector de combinaciones */}
         <Picker
           selectedValue={selectedCombination}
           onValueChange={itemValue => {
@@ -161,7 +159,6 @@ const CreateProduct: React.FC<CreateProductProps> = ({ onSave }) => {
           ))}
         </Picker>
 
-        {/* Mostrar combinaciones seleccionadas */}
         <View>
           {combinations.map(combinationId => {
             const combination = combinationsList.find(
@@ -175,7 +172,6 @@ const CreateProduct: React.FC<CreateProductProps> = ({ onSave }) => {
             )
           })}
         </View>
-        {/* Botón de agregar producto */}
         <View style={styles.buttonContainer}>
           <Button title="Add Product" onPress={handleAddProduct} />
         </View>
@@ -186,12 +182,12 @@ const CreateProduct: React.FC<CreateProductProps> = ({ onSave }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1, // Asegura que el contenedor principal pueda crecer
+    flexGrow: 1,
   },
   scrollViewContent: {
     paddingVertical: 5,
     paddingHorizontal: 10,
-    flexGrow: 1, // Permite que el contenido crezca y sea desplazable
+    flexGrow: 1,
   },
   input: {
     borderWidth: 1,
@@ -216,7 +212,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   buttonContainer: {
-    marginVertical: 80, // Añadir margen vertical para dar espacio al botón
+    marginVertical: 80,
     borderTopWidth: 1,
     borderColor: '#ccc',
     borderRadius: 10,
