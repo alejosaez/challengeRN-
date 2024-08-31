@@ -11,7 +11,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
 export type RootStackParamList = {
   Home: undefined
-  Item: { productId: string }
+  Item: { productId: string; isEditable?: boolean }
+  EditProduct: { productId: string };
   Person: undefined;
 }
 

@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Text, TouchableOpacity } from 'react-native';
-import { useAppSelector, useAppDispatch } from '../../Redux/reduxHook';
-import { RootState, AppDispatch } from '../../Redux/store/store';
-import { getProducts } from '../../Redux/actions/productsAction';
+import { useAppSelector } from '../../Redux/reduxHook';
+import { RootState } from '../../Redux/store/store';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
-import { RootStackParamList } from '../../../App'; 
+import { RootStackParamList } from '../../../App';
 import {
   Products as ProductsContainer,
   Product as ProductItem,
@@ -14,22 +13,20 @@ import {
   ProductPrice,
   AddButton,
   ProductDetails,
-  ProductFooter
+  ProductFooter,
 } from '../../styles/productsStyle';
-import { Product } from '../../Redux/types/products/productsTypes'; 
+import { Product } from '../../Redux/types/products/productsTypes';
 
 interface ProductsProps {
-  products: Product[]; // Define la prop para recibir productos filtrados
+  products: Product[];
+  onEdit: (product: Product) => void; // Propiedad para manejar la edición
+  onDelete: (productId: string) => void; // Propiedad para manejar la eliminación
+  isEditable: boolean; // Propiedad para mostrar los botones de edición/eliminación
 }
 
-const Products: React.FC<ProductsProps> = ({ products }) => {
-  const dispatch = useAppDispatch();
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>(); 
+const Products: React.FC<ProductsProps> = ({ products, onEdit, onDelete, isEditable }) => {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { loading, error } = useAppSelector((state: RootState) => state.product);
-
-  useEffect(() => {
-    dispatch(getProducts());
-  }, [dispatch]);
 
   if (loading) {
     return <Text>Loading...</Text>;
@@ -44,11 +41,11 @@ const Products: React.FC<ProductsProps> = ({ products }) => {
       {products.map((product: Product) => (
         <TouchableOpacity
           key={product.product_id}
-          onPress={() => navigation.navigate('Item', { productId: product.product_id })} 
+          onPress={() => navigation.navigate('Item', { productId: product.product_id })}
         >
           <ProductItem>
-            <ProductImage 
-              source={{ uri: product.image_url }} 
+            <ProductImage
+              source={{ uri: product.image_url }}
               resizeMode="cover"
             />
             <ProductDetails>
@@ -56,9 +53,16 @@ const Products: React.FC<ProductsProps> = ({ products }) => {
               <ProductDescription>{product.description}</ProductDescription>
               <ProductFooter>
                 <ProductPrice>${product.unit_price.toFixed(2)}</ProductPrice>
-                <AddButton onPress={() => {/* Agregar funcionalidad aquí */}}>
-                  <Text>+</Text>
-                </AddButton>
+                {isEditable && (
+                  <>
+                    <AddButton onPress={() => onEdit(product)}>
+                      <Text>Edit</Text>
+                    </AddButton>
+                    <AddButton onPress={() => onDelete(product.product_id)}>
+                      <Text>Delete</Text>
+                    </AddButton>
+                  </>
+                )}
               </ProductFooter>
             </ProductDetails>
           </ProductItem>

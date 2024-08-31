@@ -68,6 +68,7 @@ export interface Size {
   
   export interface ProductState {
     allProducts: Product[];
+    isEditable: boolean,
     product: Product|null,
     loading: boolean;
     error: string | null;

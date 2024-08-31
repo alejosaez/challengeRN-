@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, Text } from 'react-native';
+import { ScrollView, Text, View, Alert } from 'react-native'; // Importar Alert desde react-native
 import {
   Container,
   ProductImage,
@@ -15,17 +15,21 @@ import {
   AddToCartText,
   PriceText,
 } from '../../styles/itemStyle';
-import { useRoute, RouteProp } from '@react-navigation/native';
+import { useRoute, RouteProp, useNavigation, NavigationProp } from '@react-navigation/native'; // Importar NavigationProp
 import { useAppSelector, useAppDispatch } from '../../Redux/reduxHook';
 import { RootStackParamList } from '../../../App';
-import { getProductsById } from '../../Redux/actions/productsAction';
+import { getProductsById, deleteProduct } from '../../Redux/actions/productsAction';
 import { RootState } from '../../Redux/store/store';
-import SizeSelector from '../../components/SizeSelector/SizeSelector';  
+import SizeSelector from '../../components/SizeSelector/SizeSelector';
+import IconButton from '../../components/botton/IconButton/IconButton';
+import { EditIcon, DeleteIcon } from '../../components/SvgIcons/SvgIcons';
 
 const ItemScreen: React.FC = () => {
   const route = useRoute<RouteProp<RootStackParamList, 'Item'>>();
-  const { productId } = route.params;
   const dispatch = useAppDispatch();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>(); 
+  const { productId, isEditable = false } = route.params 
+  console.log("isEditable received in ItemScreen:", isEditable)
 
   const [selectedSizeIndex, setSelectedSizeIndex] = useState(0);
 
@@ -45,6 +49,21 @@ const ItemScreen: React.FC = () => {
 
   const selectedSize = productDetails.Sizes[selectedSizeIndex];
   const totalPrice = productDetails.unit_price + selectedSize.additional_price;
+
+  const handleDelete = () => {
+    dispatch(deleteProduct(productId))
+      .unwrap()
+      .then(() => {
+        navigation.goBack(); // Volver a la pantalla anterior después de eliminar
+      })
+      .catch(() => {
+        Alert.alert('Error', 'Failed to delete the product.');
+      });
+  };
+
+  const handleEdit = () => {
+    navigation.navigate('EditProduct', { productId }); 
+  };
 
   return (
     <Container>
@@ -77,6 +96,24 @@ const ItemScreen: React.FC = () => {
               <Text style={{ color: '#004D40' }}>Read more</Text>
             </AboutText>
           </Section>
+
+          {/* Botones de Editar y Eliminar visibles solo si isEditable es true */}
+          {isEditable && (
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                marginVertical: 10,
+              }}>
+                <IconButton onPress={handleEdit}>
+                <EditIcon width={24} height={24} color="#007AFF" />
+              </IconButton>
+              <IconButton onPress={handleDelete}>
+                <DeleteIcon width={24} height={24} color="red" />
+              </IconButton>
+            </View>
+          )}
+
           <AddToCartButton>
             <AddToCartText>Add to cart</AddToCartText>
             <PriceText>${totalPrice.toFixed(2)}</PriceText>
