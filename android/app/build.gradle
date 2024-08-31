@@ -83,7 +83,7 @@ android {
         versionName "1.0"
        manifestPlaceholders = [
     auth0Domain: "dev-6e3abqr4giz5d0ed.us.auth0.com", 
-    auth0Scheme: "com.chalengerm"
+    auth0Scheme: "${applicationId}.auth0"
 ]
         
     }

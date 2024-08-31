@@ -21,6 +21,8 @@ import Categories from '../../components/Category/Category';
 import Products from '../../components/products/Products';
 import { RootStackParamList } from '../../../App'
 import { LoginButton } from '../../auth0/loginButton';
+import { getSizes } from '../../Redux/actions/sizeAction';
+import { getCombination } from '../../Redux/actions/combinationsAction';
 
 const HomeScreen: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -30,6 +32,9 @@ const HomeScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   useEffect(() => {
     dispatch(getCategory());
+    dispatch(getSizes());
+    dispatch(getCombination());
+    
   }, [dispatch]);
 
   const handleSelectCategory = (categoryId: string) => {
