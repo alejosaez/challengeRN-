@@ -7,7 +7,10 @@ import {
   updateProduct,
   deleteProduct,
 } from '../../Redux/actions/productsAction'
-import { Product } from '../../Redux/types/products/productsTypes'
+import {
+  Product,
+  CreateProductData,
+} from '../../Redux/types/products/productsTypes'
 
 interface EditProductProps {
   productId: string
@@ -53,17 +56,19 @@ const EditProduct: React.FC<EditProductProps> = ({
     }
   }, [product])
 
+  // Función para alternar la selección de tamaños
   const toggleSizeSelection = (sizeId: string) => {
     if (selectedSizes.includes(sizeId)) {
-      setSelectedSizes(selectedSizes.filter(id => id !== sizeId)) // Eliminar el tamaño si ya está seleccionado
+      setSelectedSizes(selectedSizes.filter(id => id !== sizeId))
     } else {
-      setSelectedSizes([...selectedSizes, sizeId]) // Agregar el tamaño si no está seleccionado
+      setSelectedSizes([...selectedSizes, sizeId])
     }
   }
 
+  // Función para agregar una combinación
   const handleAddCombination = (combinationId: string) => {
     if (combinationId && !selectedCombinations.includes(combinationId)) {
-      setSelectedCombinations([...selectedCombinations, combinationId]) // Agregar la combinación si no está ya en la lista
+      setSelectedCombinations([...selectedCombinations, combinationId])
     }
   }
 
@@ -72,24 +77,23 @@ const EditProduct: React.FC<EditProductProps> = ({
       Alert.alert('Error', 'Please fill out all fields.')
       return
     }
-    const updatedProduct: Product = {
+
+    const updatedProduct: CreateProductData = {
       product_id: productId,
       name,
       unit_price: parseFloat(price),
       description,
       image_url: imageUrl,
       category_id: categoryId,
-      Sizes: sizesList.filter(size => selectedSizes.includes(size.size_id)),
-      Combinations: combinationsList.filter(combination =>
-        selectedCombinations.includes(combination.combination_id),
-      ),
+      sizes: selectedSizes,
+      combinations: selectedCombinations,
     }
 
     dispatch(updateProduct(updatedProduct))
       .unwrap()
-      .then(() => {
+      .then(updatedProduct => {
         Alert.alert('Success', 'Product updated successfully!')
-        onSave(updatedProduct)
+        onSave(updatedProduct) // Llamada al callback con el producto actualizado
       })
       .catch(() => {
         Alert.alert('Error', 'Failed to update product.')
