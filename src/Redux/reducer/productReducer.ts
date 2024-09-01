@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Product, ProductState } from '../types/products/productsTypes';
 import { getProducts, getProductsById, createProduct,deleteProduct,updateProduct } from '../actions/productsAction';
-import { ProductResponse } from '../types/products/productsTypes'; // Asegúrate de la ruta correcta
+import { ProductResponse } from '../types/products/productsTypes'; 
 
 const initialState: ProductState = {
   allProducts: [],
@@ -61,11 +61,25 @@ const productSlice = createSlice({
       .addCase(updateProduct.fulfilled, (state, action: PayloadAction<Product>) => {
         state.loading = false;
         const updatedProduct = action.payload;
+      
+        // Mostrar en consola el producto actualizado recibido
+        console.log('Producto actualizado recibido en fulfilled:', updatedProduct);
+      
+        // Encontrar el índice del producto que debe ser actualizado
         const index = state.allProducts.findIndex((p) => p.product_id === updatedProduct.product_id);
+      
         if (index !== -1) {
+          console.log('Índice encontrado:', index);
+          console.log('Producto antes de la actualización:', state.allProducts[index]);
+      
+          // Actualizar el producto en el estado con los datos recibidos del backend
           state.allProducts[index] = updatedProduct;
+      
+          console.log('Producto después de la actualización:', state.allProducts[index]);
+        } else {
+          console.log('Producto no encontrado en allProducts para actualizar.');
         }
-      })
+      })      
       .addCase(updateProduct.pending, (state) => {
         state.loading = true;
         state.error = null;

@@ -42,18 +42,20 @@ export const getProductsById = createAsyncThunk<Product, string>(
   }
 );
 
-export const updateProduct = createAsyncThunk<Product, Product>(
+export const updateProduct = createAsyncThunk<Product, CreateProductData>(
   'product/updateProduct',
-  async (updatedProduct, { rejectWithValue }) => {
+  async (updatedProductData, { rejectWithValue }) => {
     try {
-      const { product_id } = updatedProduct; // Extraer el ID del producto
-      const response = await axios.put(`http://10.0.2.2:3001/api/products/${product_id}`, updatedProduct);
-      return response.data;
+      const { product_id } = updatedProductData; // Extraer el ID del producto
+      const response = await axios.put(`http://10.0.2.2:3001/api/products/${product_id}`, updatedProductData);
+      return response.data as Product; // Esperamos que el backend devuelva un objeto Product completo
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
-)
+);
+
+
 
 // Acción para eliminar un producto
 export const deleteProduct = createAsyncThunk<string, string>(
