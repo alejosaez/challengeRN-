@@ -1,7 +1,9 @@
-import React from 'react';
-import { ScrollView, Text, TouchableOpacity } from 'react-native';
-// import { useNavigation, NavigationProp } from '@react-navigation/native';
-// import { RootStackParamList } from '../../../App'; // Asegúrate de importar RootStackParamList desde tu App.tsx
+import React, { useEffect, useState } from 'react';
+import { ScrollView, TouchableOpacity, Text } from 'react-native';
+import { useAppDispatch, useAppSelector } from '../../Redux/reduxHook';
+import { RootState } from '../../Redux/store/store';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { getCategory } from '../../Redux/actions/categoriesAction';
 import {
   Container,
   Header,
@@ -16,44 +18,65 @@ import {
 import NavButton from '../../components/NavButton/NavButton';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import Categories from '../../components/Category/Category';
-// import { fetchProductDetails } from '../../Redux/reducer/productReducer/productReducer';
-// import { useAppDispatch } from '../../Redux/reduxHook';
 import Products from '../../components/products/Products';
+import { RootStackParamList } from '../../../App'
+import { LoginButton } from '../../auth0/loginButton';
+import { getSizes } from '../../Redux/actions/sizeAction';
+import { getCombination } from '../../Redux/actions/combinationsAction';
+import { getProducts } from '../../Redux/actions/productsAction';
 
 const HomeScreen: React.FC = () => {
-  // const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
+  const categories = useAppSelector((state: RootState) => state.categories.allCategories);
+  const products = useAppSelector((state: RootState) => state.product.allProducts);
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  useEffect(() => {
+    dispatch(getCategory());
+    dispatch(getSizes());
+    dispatch(getCombination());
+    dispatch(getProducts());
 
-  // const handleProductPress = (productId: string) => {
-  //   // dispatch(fetchProductDetails(productId));
-  //   navigation.navigate('Item', { productId });
-  // };
+    
+    
+  }, [dispatch]);
+
+  const handleSelectCategory = (categoryId: string) => {
+    setSelectedCategoryId(categoryId);
+  };
+
+  const handleProductPress = (productId: string) => {
+    navigation.navigate('Item', { productId });
+  };
+
+  const filteredProducts = selectedCategoryId
+    ? products.filter((product) => product.category_id === selectedCategoryId)
+    : products;
 
   return (
     <Container>
       <Header>
         <Avatar source={{ uri: 'https://via.placeholder.com/40' }} />
         <Greeting>Good evening, Monica</Greeting>
+        <LoginButton/>
         <NotificationButton>
           <Text>🔔</Text>
         </NotificationButton>
       </Header>
       <SearchBar />
-      <Categories />
-      <ScrollView>
-        <Products/>
-          {/* <TouchableOpacity onPress={() => handleProductPress('1')}> */}
-          <TouchableOpacity>
-          </TouchableOpacity>
-          {/* <TouchableOpacity onPress={() => handleProductPress('2')}> */}
-        <SpecialOffer>
-          <OfferTitle>Special Offer 🔥</OfferTitle>
-          <Offer>
-            <OfferText>
-              Get two ice flowered cappuccinos for the price of one
-            </OfferText>
-          </Offer>
-        </SpecialOffer>
+      <Categories categories={categories} onSelectCategory={handleSelectCategory} />
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <Products products={filteredProducts} />
+        <TouchableOpacity onPress={() => handleProductPress('1')}>
+          <SpecialOffer>
+            <OfferTitle>Special Offer 🔥</OfferTitle>
+            <Offer>
+              <OfferText>
+                Get two ice flowered cappuccinos for the price of one
+              </OfferText>
+            </Offer>
+          </SpecialOffer>
+        </TouchableOpacity>
       </ScrollView>
       <NavButton />
     </Container>

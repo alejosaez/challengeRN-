@@ -5,6 +5,7 @@
 // import store from '../Redux/store/store';
 // import HomeScreen from '../screens/HomeScreen/Home';
 // import ItemScreen from '../screens/ItemScreen/itemScreen';
+// import PersonScreen from '../screens/PersonScreen/Person'; // Importa PersonScreen
 
 // const Stack = createStackNavigator();
 
@@ -15,6 +16,7 @@
 //         <Stack.Navigator>
 //           <Stack.Screen name="Home" component={HomeScreen} />
 //           <Stack.Screen name="Item" component={ItemScreen} />
+//           <Stack.Screen name="Person" component={PersonScreen} />
 //         </Stack.Navigator>
 //       </NavigationContainer>
 //     </Provider>

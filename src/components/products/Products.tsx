@@ -1,59 +1,82 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { Text } from 'react-native';
-import { useAppSelector } from '../../Redux/reduxHook'; // Asegúrate de importar useAppSelector correctamente
-import { RootState, AppDispatch } from '../../Redux/store/store'
-import { getProducts } from '../../Redux/actions/productsAction'; 
+import React from 'react'
+import { Text, TouchableOpacity } from 'react-native'
+import { useAppSelector } from '../../Redux/reduxHook'
+import { RootState } from '../../Redux/store/store'
+import { useNavigation, NavigationProp } from '@react-navigation/native'
+import { RootStackParamList } from '../../../App'
 import {
   Products as ProductsContainer,
-  Product,
+  Product as ProductItem,
   ProductImage,
   ProductName,
   ProductDescription,
   ProductPrice,
   AddButton,
   ProductDetails,
-  ProductFooter
-} from '../../styles/productsStyle';
+  ProductFooter,
+} from '../../styles/productsStyle'
+import { Product } from '../../Redux/types/products/productsTypes'
 
-const Products: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const { allProducts, loading, error } = useAppSelector((state: RootState) => state.product);
+interface ProductsProps {
+  products: Product[]
+  onEdit?: (product: Product) => void
+  onDelete?: (productId: string) => void
+  isEditable?: boolean
+}
 
-  useEffect(() => {
-    dispatch(getProducts());
-  }, [dispatch]);
-  console.log(allProducts); 
+const Products: React.FC<ProductsProps> = ({
+  products,
+  onEdit,
+  onDelete,
+  isEditable,
+}) => {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>()
+  const { loading, error } = useAppSelector((state: RootState) => state.product)
+
   if (loading) {
-    return <Text>Loading...</Text>;
+    return <Text>Loading...</Text>
   }
 
   if (error) {
-    return <Text>Error: {error}</Text>;
+    return <Text>Error: {error}</Text>
   }
 
   return (
-    <ProductsContainer>
-      {allProducts.map(product => (
-        <Product key={product.product_id}>
-          <ProductImage 
-            source={{ uri: product.image_url }} 
-            resizeMode="cover"
-          />
-          <ProductDetails>
-            <ProductName>{product.name}</ProductName>
-            <ProductDescription>{product.description}</ProductDescription>
-            <ProductFooter>
-              <ProductPrice>${product.unit_price.toFixed(2)}</ProductPrice>
-              <AddButton>
-                <Text>+</Text>
-              </AddButton>
-            </ProductFooter>
-          </ProductDetails>
-        </Product>
+    <>
+      {products.map((product: Product) => (
+        <TouchableOpacity
+          key={product.product_id}
+          onPress={() =>
+            navigation.navigate('Item', { productId: product.product_id })
+          }>
+          <ProductItem>
+            <ProductImage
+              source={{ uri: product.image_url }}
+              resizeMode="cover"
+            />
+            <ProductDetails>
+              <ProductName>{product.name}</ProductName>
+              <ProductDescription>{product.description}</ProductDescription>
+              <ProductFooter>
+                <ProductPrice>${product.unit_price.toFixed(2)}</ProductPrice>
+                {isEditable && (
+                  <>
+                    <AddButton onPress={() => onEdit && onEdit(product)}>
+                      <Text>Edit</Text>
+                    </AddButton>
+                    <AddButton
+                      onPress={() => onDelete && onDelete(product.product_id)}>
+                      <Text>Delete</Text>
+                    </AddButton>
+                  </>
+                )}
+              </ProductFooter>
+            </ProductDetails>
+          </ProductItem>
+        </TouchableOpacity>
       ))}
-    </ProductsContainer>
-  );
-};
+    </>
+  )
+}
 
-export default Products;
+export default Products
