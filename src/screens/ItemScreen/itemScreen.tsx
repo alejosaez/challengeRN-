@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { ScrollView, Text, View, Alert } from 'react-native'; // Importar Alert desde react-native
+import React, { useEffect, useState } from 'react'
+import { ScrollView, Text, View, Alert } from 'react-native'
 import {
   Container,
   ProductImage,
@@ -14,56 +14,76 @@ import {
   AddToCartButton,
   AddToCartText,
   PriceText,
-} from '../../styles/itemStyle';
-import { useRoute, RouteProp, useNavigation, NavigationProp } from '@react-navigation/native'; // Importar NavigationProp
-import { useAppSelector, useAppDispatch } from '../../Redux/reduxHook';
-import { RootStackParamList } from '../../../App';
-import { getProductsById, deleteProduct } from '../../Redux/actions/productsAction';
-import { RootState } from '../../Redux/store/store';
-import SizeSelector from '../../components/SizeSelector/SizeSelector';
-import IconButton from '../../components/botton/IconButton/IconButton';
-import { EditIcon, DeleteIcon } from '../../components/SvgIcons/SvgIcons';
+} from '../../styles/itemStyle'
+import {
+  useRoute,
+  RouteProp,
+  useNavigation,
+  NavigationProp,
+} from '@react-navigation/native'
+import { useAppSelector, useAppDispatch } from '../../Redux/reduxHook'
+import { RootStackParamList } from '../../../App'
+import {
+  getProductsById,
+  deleteProduct,
+} from '../../Redux/actions/productsAction'
+import { RootState } from '../../Redux/store/store'
+import SizeSelector from '../../components/SizeSelector/SizeSelector'
+import IconButton from '../../components/botton/IconButton/IconButton'
+import { EditIcon, DeleteIcon } from '../../components/SvgIcons/SvgIcons'
+import EditProduct from '../../components/products/EditeProducts'
+import { Product } from '../../Redux/types/products/productsTypes'
 
 const ItemScreen: React.FC = () => {
-  const route = useRoute<RouteProp<RootStackParamList, 'Item'>>();
-  const dispatch = useAppDispatch();
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>(); 
-  const { productId, isEditable = false } = route.params 
-  console.log("isEditable received in ItemScreen:", isEditable)
+  const route = useRoute<RouteProp<RootStackParamList, 'Item'>>()
+  const dispatch = useAppDispatch()
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>()
+  const { productId, isEditable = false } = route.params
+  console.log('isEditable received in ItemScreen:', isEditable)
+  const [isEditFormVisible, setIsEditFormVisible] = useState(false)
 
-  const [selectedSizeIndex, setSelectedSizeIndex] = useState(0);
+  const [selectedSizeIndex, setSelectedSizeIndex] = useState(0)
 
   useEffect(() => {
-    dispatch(getProductsById(productId));
-  }, [dispatch, productId]);
+    dispatch(getProductsById(productId))
+  }, [dispatch, productId])
 
-  const productDetails = useAppSelector((state: RootState) => state.product.product);
+  const productDetails = useAppSelector(
+    (state: RootState) => state.product.product,
+  )
 
   if (!productDetails) {
     return (
       <Container>
         <Text>Loading...</Text>
       </Container>
-    );
+    )
   }
 
-  const selectedSize = productDetails.Sizes[selectedSizeIndex];
-  const totalPrice = productDetails.unit_price + selectedSize.additional_price;
+  const selectedSize = productDetails.Sizes[selectedSizeIndex]
+  const totalPrice = productDetails.unit_price + selectedSize.additional_price
 
   const handleDelete = () => {
     dispatch(deleteProduct(productId))
       .unwrap()
       .then(() => {
-        navigation.goBack(); // Volver a la pantalla anterior después de eliminar
+        navigation.goBack()
       })
       .catch(() => {
-        Alert.alert('Error', 'Failed to delete the product.');
-      });
-  };
+        Alert.alert('Error', 'Failed to delete the product.')
+      })
+  }
 
   const handleEdit = () => {
-    navigation.navigate('EditProduct', { productId }); 
-  };
+    setIsEditFormVisible(!isEditFormVisible)
+  }
+  const handleSave = (updatedProduct: Product) => {
+    setIsEditFormVisible(false)
+  }
+
+  const handleCancel = () => {
+    setIsEditFormVisible(false)
+  }
 
   return (
     <Container>
@@ -82,22 +102,20 @@ const ItemScreen: React.FC = () => {
           </Rating>
           <Section>
             <SectionTitle>Coffee Size</SectionTitle>
-            <SizeSelector 
-              sizes={productDetails.Sizes} 
-              selectedSizeIndex={selectedSizeIndex} 
-              onSizeSelect={setSelectedSizeIndex} 
+            <SizeSelector
+              sizes={productDetails.Sizes}
+              selectedSizeIndex={selectedSizeIndex}
+              onSizeSelect={setSelectedSizeIndex}
             />
           </Section>
           <Section>
             <SectionTitle>About</SectionTitle>
             <AboutText>
-              {productDetails.description} 
-              {' '}
+              {productDetails.description}{' '}
               <Text style={{ color: '#004D40' }}>Read more</Text>
             </AboutText>
           </Section>
 
-          {/* Botones de Editar y Eliminar visibles solo si isEditable es true */}
           {isEditable && (
             <View
               style={{
@@ -105,13 +123,21 @@ const ItemScreen: React.FC = () => {
                 justifyContent: 'space-between',
                 marginVertical: 10,
               }}>
-                <IconButton onPress={handleEdit}>
+              <IconButton onPress={handleEdit}>
                 <EditIcon width={24} height={24} color="#007AFF" />
               </IconButton>
               <IconButton onPress={handleDelete}>
                 <DeleteIcon width={24} height={24} color="red" />
               </IconButton>
             </View>
+          )}
+
+          {isEditFormVisible && (
+            <EditProduct
+              productId={productId}
+              onSave={handleSave}
+              onDelete={handleDelete}
+            />
           )}
 
           <AddToCartButton>
@@ -121,7 +147,7 @@ const ItemScreen: React.FC = () => {
         </ProductInfo>
       </ScrollView>
     </Container>
-  );
-};
+  )
+}
 
-export default ItemScreen;
+export default ItemScreen

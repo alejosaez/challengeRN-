@@ -23,6 +23,7 @@ import { RootStackParamList } from '../../../App'
 import { LoginButton } from '../../auth0/loginButton';
 import { getSizes } from '../../Redux/actions/sizeAction';
 import { getCombination } from '../../Redux/actions/combinationsAction';
+import { getProducts } from '../../Redux/actions/productsAction';
 
 const HomeScreen: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -34,6 +35,9 @@ const HomeScreen: React.FC = () => {
     dispatch(getCategory());
     dispatch(getSizes());
     dispatch(getCombination());
+    dispatch(getProducts());
+
+    
     
   }, [dispatch]);
 
