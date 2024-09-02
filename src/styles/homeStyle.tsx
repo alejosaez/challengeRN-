@@ -8,9 +8,18 @@ export const Container = styled.View`
 `;
 
 export const Header = styled.View`
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 15px;
+  width: 100%;
+  padding: 0 20px; 
+`;
+
+export const Row = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
 `;
 
 export const Avatar = styled.Image`
@@ -20,22 +29,44 @@ export const Avatar = styled.Image`
 `;
 
 export const Greeting = styled.Text`
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
+  color: #382E1E;
+  margin-top: 10px;
+  text-align: left;
+  justify-content: left;
 `;
 
-export const NotificationButton = styled(TouchableOpacity)``;
+export const NotificationButton = styled(TouchableOpacity)`
+  width: 30px;
+  height: 30px;
+  justify-content: center;
+  align-items: center;
+`;
 
 export const SearchBar = styled.View`
   flex-direction: row;
   margin: 20px 0;
+  background-color: #F2F2F2;
+  border-radius: 40px;
+  height: 60px;
+  align-items: center;
+  padding: 0 10px;
+  margin-bottom: 20px;
+`;
+
+export const CategoriesTitle = styled.Text`
+  font-size: 18px;
+  font-weight: bold;
+  color: #382E1E;
+  margin-bottom: 10px;
 `;
 
 export const SearchInput = styled.TextInput`
   flex: 1;
-  border: 1px solid #ccc;
   padding: 10px;
-  border-radius: 10px;
+  font-size: 16px;
+  color: #777;
 `;
 
 export const SearchButton = styled(TouchableOpacity)`
