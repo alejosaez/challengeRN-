@@ -8,7 +8,7 @@ interface CategoryButtonProps {
 export const CategoriesContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
-  margin: 10px;
+  margin-top: 5px;
 `;
 
 export const CategoryButton = styled(TouchableOpacity)<CategoryButtonProps>`
@@ -17,6 +17,8 @@ export const CategoryButton = styled(TouchableOpacity)<CategoryButtonProps>`
   padding: 10px;
   border-radius: 20px;
   background-color: ${({ active }) => (active ? '#00512D' : '#E0E0E0')};
+  width: 110px;
+  margin-right: 10px;
 `;
 
 export const CategoryButtonText = styled.Text<CategoryButtonProps>`
