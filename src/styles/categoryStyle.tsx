@@ -8,7 +8,8 @@ interface CategoryButtonProps {
 export const CategoriesContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
-  margin-top: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 `;
 
 export const CategoryButton = styled(TouchableOpacity)<CategoryButtonProps>`
