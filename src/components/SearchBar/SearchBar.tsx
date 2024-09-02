@@ -16,7 +16,6 @@ import { ProductSearchResponse } from '../../Redux/types/products/productsTypes'
 import SearchIcon from '../../assets/icons/SearchIcon.svg';
 import FilterIcon from '../../assets/icons/FilterIcon.svg';
 
-
 const SearchComponent: React.FC = () => {
   const [searchText, setSearchText] = useState('');
   const [debouncedSearchText, setDebouncedSearchText] = useState(searchText);
@@ -27,7 +26,6 @@ const SearchComponent: React.FC = () => {
   ) as ProductSearchResponse[];
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  // Debounce para retrasar la búsqueda
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchText(searchText);
@@ -38,7 +36,6 @@ const SearchComponent: React.FC = () => {
     };
   }, [searchText]);
 
-  // Realizar la búsqueda cuando debouncedSearchText cambia
   useEffect(() => {
     if (debouncedSearchText.trim()) {
       dispatch(searchProducts(debouncedSearchText));
@@ -48,9 +45,11 @@ const SearchComponent: React.FC = () => {
     }
   }, [debouncedSearchText, dispatch]);
 
-  // Manejar la selección de un producto
   const handleSelectProduct = (productId: string) => {
+    setSearchText('');
+    setDebouncedSearchText('');
     setShowResults(false);
+
     navigation.navigate('Item', { productId, isEditable: false });
   };
 
@@ -58,7 +57,7 @@ const SearchComponent: React.FC = () => {
     <View>
       <View style={styles.searchBarContainer}>
         <View style={styles.filterIcon}>
-        <SearchIcon width={20} height={20} />
+          <SearchIcon width={20} height={20} />
         </View>
         <TextInput
           style={styles.searchInput}
@@ -67,12 +66,10 @@ const SearchComponent: React.FC = () => {
           onChangeText={(text: string) => setSearchText(text)}
         />
         <View style={styles.searchIconContainer}>
-
-        <FilterIcon width={24} height={24} />
+          <FilterIcon width={24} height={24} />
         </View>
       </View>
 
-      {/* Mostrar las sugerencias de productos solo si hay texto de búsqueda y showResults es true */}
       {showResults && (
         <View style={styles.resultsContainer}>
           <FlatList
