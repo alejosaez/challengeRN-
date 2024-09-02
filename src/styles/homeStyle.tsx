@@ -29,12 +29,13 @@ export const Avatar = styled.Image`
 `;
 
 export const Greeting = styled.Text`
-  font-size: 20px;
+  font-size: 26px;
   font-weight: bold;
   color: #382E1E;
   margin-top: 10px;
   text-align: left;
   justify-content: left;
+  margin-bottom: "10px";
 `;
 
 export const NotificationButton = styled(TouchableOpacity)`
@@ -56,10 +57,11 @@ export const SearchBar = styled.View`
 `;
 
 export const CategoriesTitle = styled.Text`
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
   color: #382E1E;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
+  margin-top: 20px;
 `;
 
 export const SearchInput = styled.TextInput`

@@ -15,7 +15,7 @@ import {
   OfferText,
   OfferTitle,
   Row,
-  CategoriesTitle
+  CategoriesTitle,
 } from '../../styles/homeStyle'
 import NavButton from '../../components/NavButton/NavButton'
 import SearchBar from '../../components/SearchBar/SearchBar'
@@ -69,8 +69,8 @@ const HomeScreen: React.FC = () => {
             <NotificationIcon width={30} height={30} />
           </NotificationButton>
         </Row>
-        <Greeting>Good evening, Monica</Greeting>
       </Header>
+      <Greeting>Good evening, Monica</Greeting>
 
       <SearchBar />
 
