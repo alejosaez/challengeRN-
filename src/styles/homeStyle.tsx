@@ -4,6 +4,7 @@ import { TouchableOpacity } from 'react-native';
 export const Container = styled.View`
   flex: 1;
   padding: 20px;
+  background-color: #FCFCFC;
 `;
 
 export const Header = styled.View`

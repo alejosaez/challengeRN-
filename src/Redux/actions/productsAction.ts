@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
-import { Product,CreateProductData, ProductResponse  } from '../types/products/productsTypes'
+import { Product,CreateProductData, ProductResponse, ProductSearchResponse  } from '../types/products/productsTypes'
 
 
 export const createProduct = createAsyncThunk<
@@ -55,9 +55,20 @@ export const updateProduct = createAsyncThunk<Product, CreateProductData>(
   }
 );
 
+export const searchProducts = createAsyncThunk<ProductSearchResponse[], string>(
+  'products/searchProducts',
+  async (searchText, { rejectWithValue }) => {
+    try {
+      const response = await axios.get<ProductSearchResponse[]>(`http://10.0.2.2:3001/api/products`, {
+        params: { search: searchText },
+      });
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
 
-
-// Acción para eliminar un producto
 export const deleteProduct = createAsyncThunk<string, string>(
   'product/deleteProduct',
   async (productId, { rejectWithValue }) => {
