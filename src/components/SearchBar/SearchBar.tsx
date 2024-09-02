@@ -12,7 +12,10 @@ import { useAppDispatch, useAppSelector } from '../../Redux/reduxHook';
 import { searchProducts } from '../../Redux/actions/productsAction';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '../../../App';
-import { Product, ProductSearchResponse } from '../../Redux/types/products/productsTypes';
+import { ProductSearchResponse } from '../../Redux/types/products/productsTypes';
+import SearchIcon from '../../assets/icons/SearchIcon.svg';
+import FilterIcon from '../../assets/icons/FilterIcon.svg';
+
 
 const SearchComponent: React.FC = () => {
   const [searchText, setSearchText] = useState('');
@@ -54,20 +57,19 @@ const SearchComponent: React.FC = () => {
   return (
     <View>
       <View style={styles.searchBarContainer}>
-        <TouchableOpacity style={styles.searchIconContainer}>
-          <Text style={styles.searchIconText}>🔍</Text>
-        </TouchableOpacity>
+        <View style={styles.filterIcon}>
+        <SearchIcon width={20} height={20} />
+        </View>
         <TextInput
           style={styles.searchInput}
           placeholder="Search Coffee..."
           value={searchText}
           onChangeText={(text: string) => setSearchText(text)}
         />
-        <TouchableOpacity
-          style={styles.filterButton}
-          onPress={() => console.log('Filter clicked')}>
-          <Text style={styles.filterIconText}>⚙️</Text>
-        </TouchableOpacity>
+        <View style={styles.searchIconContainer}>
+
+        <FilterIcon width={24} height={24} />
+        </View>
       </View>
 
       {/* Mostrar las sugerencias de productos solo si hay texto de búsqueda y showResults es true */}
@@ -103,33 +105,36 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F2F2F2',
     borderRadius: 40,
-    height: 67,
+    height: 60,
     paddingHorizontal: 10,
     margin: 10,
   },
   searchInput: {
     flex: 1,
-    padding: 10,
+    padding: 5,
     fontSize: 16,
     color: '#777',
   },
   searchIconContainer: {
-    backgroundColor: '#382E1E',
-    width: 25.51,
-    height: 25.51,
-    borderRadius: 12.75,
+    backgroundColor: '#CF9F69',
+    width: 40,
+    height: 40,
+    borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 10,
   },
-  searchIconText: {
-    color: '#fff',
+  filterIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   filterButton: {
     backgroundColor: '#CF9F69',
-    width: 49,
-    height: 49,
-    borderRadius: 24.5,
+    width: 45,
+    height: 45,
+    borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -141,6 +146,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 67,
     width: '100%',
+    marginTop: 10,
     backgroundColor: 'white',
     zIndex: 1000,
     maxHeight: 200,
