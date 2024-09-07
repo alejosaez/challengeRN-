@@ -1,4 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.chalengerm"> <!-- Asegúrate de que el nombre del paquete sea el correcto -->
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -10,6 +11,14 @@
         android:allowBackup="false"
         android:theme="@style/AppTheme">
         
+        <!-- Meta-data para Google Play Services -->
+       <meta-data
+    android:name="com.google.android.gms.wallet.api.enabled"
+    android:value="true" />
+<meta-data
+    android:name="com.google.android.gms.version"
+    android:value="@integer/google_play_services_version" />
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -17,23 +26,22 @@
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize"
             android:exported="true">
-            
+
+            <!-- Intent filter para lanzar la actividad principal -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            
-            <!-- Intent filter para manejar el callback de Auth0 -->
+
+            <!-- Intent filter para manejar el callback de Google Sign-In -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 
-                <!-- URI Scheme y dominio configurados para Auth0 -->
+                <!-- URI Scheme configurado para Google Sign-In -->
                 <data
-                    android:scheme="com.chalengerm"
-                    android:host="dev-6e3abqr4giz5d0ed.us.auth0.com"
-                    android:pathPrefix="/android/com.chalengerm/callback" />
+                    android:scheme="com.googleusercontent.apps.648491833455-1iq2kv4m6sqfcbc2454tmfcgbbme8rl3" />
             </intent-filter>
         </activity>
     </application>

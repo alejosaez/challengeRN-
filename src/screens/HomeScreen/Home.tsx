@@ -22,7 +22,7 @@ import SearchBar from '../../components/SearchBar/SearchBar'
 import Categories from '../../components/Category/Category'
 import Products from '../../components/products/Products'
 import { RootStackParamList } from '../../../App'
-import { LoginButton } from '../../auth0/loginButton'
+// import { LoginButton } from '../../auth0/loginButton'
 import { getSizes } from '../../Redux/actions/sizeAction'
 import { getCombination } from '../../Redux/actions/combinationsAction'
 import { getProducts } from '../../Redux/actions/productsAction'
@@ -71,7 +71,6 @@ const HomeScreen: React.FC = () => {
         </Row>
       </Header>
       <Greeting>Good evening, Monica</Greeting>
-
       <SearchBar />
 
       <CategoriesTitle>Categories</CategoriesTitle>
