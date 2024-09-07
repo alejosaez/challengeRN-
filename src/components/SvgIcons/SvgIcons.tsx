@@ -20,3 +20,13 @@ export const DeleteIcon = ({ width = 24, height = 24, color = '#000' }) => (
     />
   </Svg>
 );
+
+
+export const  StarIcon = () => (
+  <Svg width="13.13" height="13.23" viewBox="0 0 24 24">
+    <Path
+      d="M12 2.5l3.09 6.26 6.91 1-5 4.87L18.18 21 12 17.27 5.82 21l1.18-6.37-5-4.87 6.91-1L12 2.5z"
+      fill="#FFFFFF" 
+    />
+  </Svg>
+);

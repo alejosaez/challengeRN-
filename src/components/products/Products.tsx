@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, TouchableOpacity } from 'react-native'
+import { Text, TouchableOpacity, ScrollView } from 'react-native'
 import { useAppSelector } from '../../Redux/reduxHook'
 import { RootState } from '../../Redux/store/store'
 import { useNavigation, NavigationProp } from '@react-navigation/native'
@@ -14,7 +14,12 @@ import {
   AddButton,
   ProductDetails,
   ProductFooter,
+  PlusButton,
+  PlusText,
+  RatingContainer,
+  RatingText,
 } from '../../styles/productsStyle'
+import { StarIcon } from '../SvgIcons/SvgIcons'
 import { Product } from '../../Redux/types/products/productsTypes'
 
 interface ProductsProps {
@@ -22,6 +27,21 @@ interface ProductsProps {
   onEdit?: (product: Product) => void
   onDelete?: (productId: string) => void
   isEditable?: boolean
+}
+
+const truncateText = (text: string, maxLength: number) => {
+  if (text.length > maxLength) {
+    return text.substring(0, maxLength) + '...'
+  }
+  return text
+}
+
+const getDynamicFontSize = (text: string, baseSize: number) => {
+  const maxLength = 20
+  if (text.length > maxLength) {
+    return baseSize - (text.length - maxLength) * 0.5
+  }
+  return baseSize
 }
 
 const Products: React.FC<ProductsProps> = ({
@@ -42,7 +62,11 @@ const Products: React.FC<ProductsProps> = ({
   }
 
   return (
-    <>
+    <ScrollView
+      horizontal={true}
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={{ paddingHorizontal: 10 }}
+    >
       {products.map((product: Product) => (
         <TouchableOpacity
           key={product.product_id}
@@ -50,15 +74,30 @@ const Products: React.FC<ProductsProps> = ({
             navigation.navigate('Item', { productId: product.product_id })
           }>
           <ProductItem>
+            <RatingContainer>
+              <StarIcon />
+              <RatingText>4.7</RatingText>
+            </RatingContainer>
+
             <ProductImage
               source={{ uri: product.image_url }}
               resizeMode="cover"
             />
             <ProductDetails>
-              <ProductName>{product.name}</ProductName>
-              <ProductDescription>{product.description}</ProductDescription>
+              <ProductName
+                numberOfLines={1}
+                ellipsizeMode="tail"
+                style={{ fontSize: getDynamicFontSize(product.name, 18) }}>
+                {product.name}
+              </ProductName>
+              <ProductDescription>
+                {truncateText(product.description, 30)}
+              </ProductDescription>
               <ProductFooter>
                 <ProductPrice>${product.unit_price.toFixed(2)}</ProductPrice>
+                <PlusButton onPress={() => {}}>
+                  <PlusText>+</PlusText>
+                </PlusButton>
                 {isEditable && (
                   <>
                     <AddButton onPress={() => onEdit && onEdit(product)}>
@@ -75,7 +114,7 @@ const Products: React.FC<ProductsProps> = ({
           </ProductItem>
         </TouchableOpacity>
       ))}
-    </>
+    </ScrollView>
   )
 }
 
