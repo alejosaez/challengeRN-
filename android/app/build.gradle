@@ -82,8 +82,8 @@ android {
         versionCode 1
         versionName "1.0"
        manifestPlaceholders = [
-    auth0Domain: "dev-6e3abqr4giz5d0ed.us.auth0.com", 
-    auth0Scheme: "${applicationId}.auth0"
+        googleAuthRedirectScheme: 'com.googleusercontent.apps.648491833455-1iq2kv4m6sqfcbc2454tmfcgbbme8rl3.apps.googleusercontent.com'
+
 ]
         
     }
@@ -112,6 +112,8 @@ android {
 dependencies {
     
     implementation("com.facebook.react:react-android")
+    implementation 'com.google.android.gms:play-services-auth:20.4.1'
+
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
@@ -119,6 +121,5 @@ dependencies {
         implementation jscFlavor
     }
 
-    implementation 'com.auth0.android:auth0:2.0.0'
 }
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)

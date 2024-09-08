@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Product, ProductState } from '../types/products/productsTypes';
 import { getProducts, getProductsById, createProduct,deleteProduct,updateProduct } from '../actions/productsAction';
-import { ProductResponse } from '../types/products/productsTypes'; 
-
+import { ProductSearchResponse, ProductResponse } from '../types/products/productsTypes'; 
+import { searchProducts } from '../actions/productsAction';
 const initialState: ProductState = {
   allProducts: [],
+  filteredProducts: [],
   product: null,
   isEditable: false,
   loading: false,
@@ -85,6 +86,18 @@ const productSlice = createSlice({
         state.error = null;
       })
       .addCase(updateProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(searchProducts.fulfilled, (state, action: PayloadAction<ProductSearchResponse[]>) => {
+        state.loading = false;
+        state.filteredProducts = action.payload; // Actualizar con los resultados de la búsqueda
+      })
+      .addCase(searchProducts.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(searchProducts.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })

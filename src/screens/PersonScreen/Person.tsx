@@ -2,30 +2,21 @@ import React, { useState } from 'react'
 import { View, Text, Button, StyleSheet } from 'react-native'
 import CreateProduct from '../../components/products/CreateProduct'
 import EditProducts from '../../components/products/EditeProducts'
-import Products from '../../components/products/Products' // Importa el componente Products
-import {
-  Product,
-  CreateProductData,
-} from '../../Redux/types/products/productsTypes'
+import Products from '../../components/products/Products'
+import { Product } from '../../Redux/types/products/productsTypes'
 import { useAppSelector, useAppDispatch } from '../../Redux/reduxHook'
-import {
-  updateProduct,
-  createProduct,
-  deleteProduct,
-} from '../../Redux/actions/productsAction'
-import { useNavigation, NavigationProp } from '@react-navigation/native' // Importar useNavigation
-import { RootStackParamList } from '../../../App' // Asegúrate de importar el tipo correcto para las rutas
-import {setEditable} from "../../Redux/reducer/productReducer"
+import { updateProduct, deleteProduct } from '../../Redux/actions/productsAction'
+import { useNavigation, NavigationProp } from '@react-navigation/native'
+import { RootStackParamList } from '../../../App'
+
 const PersonScreen: React.FC = () => {
   const dispatch = useAppDispatch()
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>() // Utiliza useNavigation para obtener la navegación
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>()
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [showForm, setShowForm] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [showProducts, setShowProducts] = useState(false)
-  
 
-  // Obtener todos los productos del estado de Redux
   const products = useAppSelector(state => state.product.allProducts)
 
   const handleEditProducts = () => {
@@ -34,32 +25,21 @@ const PersonScreen: React.FC = () => {
   }
 
   const handleProductClick = (product: Product) => {
-    dispatch(setEditable(true))
-    console.log("productClick: ")
-    navigation.navigate('Item', {
-      productId: product.product_id,
-      isEditable: true,
-    })
+    setSelectedProduct(product)
+    setIsEditing(true)
+    setShowForm(true)
   }
+
   const handleCreateProduct = () => {
     setSelectedProduct(null)
-    setShowForm(true)
     setIsEditing(false)
+    setShowForm(true)
     setShowProducts(false)
   }
 
-  const saveProduct = (product: Product | CreateProductData) => {
+  const saveProduct = (product: Product) => {
     if (isEditing && selectedProduct) {
-      // Actualizar el producto existente
-      dispatch(updateProduct(product as Product))
-        .unwrap()
-        .then(() => {
-          setShowForm(false)
-          setShowProducts(true)
-        })
-    } else {
-      // Crear un nuevo producto
-      dispatch(createProduct(product as CreateProductData))
+      dispatch(updateProduct(product))
         .unwrap()
         .then(() => {
           setShowForm(false)
@@ -80,19 +60,18 @@ const PersonScreen: React.FC = () => {
   return (
     <View style={styles.container}>
       <Text>User Information</Text>
-      {/* Aquí iría la info del usuario */}
-
       <Button title="Edit Product" onPress={handleEditProducts} />
       {showProducts && (
         <Products
           products={products}
-          onEdit={handleProductClick} // Pasar la función de edición
-          onDelete={deleteProductHandler} // Pasar la función de eliminación
-          isEditable={showProducts} // Mostrar botones solo si showProducts es true
+          onEdit={handleProductClick}
+          onDelete={deleteProductHandler}
+          isEditable={showProducts}
         />
       )}
-
       <Button title="Create Product" onPress={handleCreateProduct} />
+      
+      {/* Formulario de Edición */}
       {showForm && isEditing && selectedProduct && (
         <EditProducts
           productId={selectedProduct.product_id}
@@ -100,7 +79,11 @@ const PersonScreen: React.FC = () => {
           onDelete={() => deleteProductHandler(selectedProduct.product_id)}
         />
       )}
-      {showForm && !isEditing && <CreateProduct onSave={saveProduct} />}
+      
+      {/* Formulario de Creación */}
+      {/* {showForm && !isEditing && (
+        <CreateProduct onSave={() => setShowForm(false)} />
+      )} */}
     </View>
   )
 }
