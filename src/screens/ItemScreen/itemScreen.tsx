@@ -30,9 +30,6 @@ import {
 } from '../../Redux/actions/productsAction'
 import { RootState } from '../../Redux/store/store'
 import SizeSelector from '../../components/SizeSelector/SizeSelector'
-import IconButton from '../../components/botton/IconButton/IconButton'
-import { EditIcon, DeleteIcon } from '../../components/SvgIcons/SvgIcons'
-import EditProduct from '../../components/products/EditeProducts'
 import { Product } from '../../Redux/types/products/productsTypes'
 import { FeedbackIcon } from '../../components/SvgIcons/SvgIcons' // Importar el nuevo ícono
 
@@ -165,31 +162,6 @@ const ItemScreen: React.FC = () => {
               </TouchableOpacity>
             </AboutText>
           </Section>
-
-          {isEditable && (
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                marginVertical: 10,
-              }}>
-              <IconButton onPress={handleEdit}>
-                <EditIcon width={24} height={24} color="#007AFF" />
-              </IconButton>
-              <IconButton onPress={handleDelete}>
-                <DeleteIcon width={24} height={24} color="red" />
-              </IconButton>
-            </View>
-          )}
-
-          {isEditFormVisible && (
-            <EditProduct
-              productId={productId}
-              onSave={handleSave}
-              onDelete={handleDelete}
-            />
-          )}
-
           <AddToCartButton>
             <AddToCartText>
               <Text>Add to cart</Text>
