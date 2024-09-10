@@ -30,3 +30,12 @@ export const  StarIcon = () => (
     />
   </Svg>
 );
+
+export const FeedbackIcon = () => (
+  <Svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+    <Path
+      d="M12 2.5l3.09 6.26 6.91 1-5 4.87L18.18 21 12 17.27 5.82 21l1.18-6.37-5-4.87 6.91-1L12 2.5z"
+      fill="#fff"
+    />
+  </Svg>
+);
