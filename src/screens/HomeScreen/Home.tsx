@@ -27,6 +27,7 @@ import { getSizes } from '../../Redux/actions/sizeAction'
 import { getCombination } from '../../Redux/actions/combinationsAction'
 import { getProducts } from '../../Redux/actions/productsAction'
 import NotificationIcon from '../../assets/icons/NotificationIcon.svg' // Icono de notificación SVG
+import SpecialOfferCard from '../../components/Special Offer/Special Offer'
 
 const HomeScreen: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -55,6 +56,7 @@ const HomeScreen: React.FC = () => {
   const handleProductPress = (productId: string) => {
     navigation.navigate('Item', { productId })
   }
+  const specialProduct = products.length > 0 ? products[0] : null; 
 
   const filteredProducts = selectedCategoryId
     ? products.filter(product => product.category_id === selectedCategoryId)
@@ -81,16 +83,19 @@ const HomeScreen: React.FC = () => {
 
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <Products products={filteredProducts} />
-        <TouchableOpacity onPress={() => handleProductPress('1')}>
-          <SpecialOffer>
-            <OfferTitle>Special Offer 🔥</OfferTitle>
-            <Offer>
-              <OfferText>
-                Get two ice flowered cappuccinos for the price of one
-              </OfferText>
-            </Offer>
-          </SpecialOffer>
-        </TouchableOpacity>
+        {specialProduct && (
+          <TouchableOpacity onPress={() => handleProductPress(specialProduct.product_id)}>
+            <SpecialOffer>
+              <OfferTitle>Special Offer 🔥</OfferTitle>
+              <SpecialOfferCard product={specialProduct} />
+              <Offer>
+                <OfferText>
+                  Get two ice flowered cappuccinos for the price of one
+                </OfferText>
+              </Offer>
+            </SpecialOffer>
+          </TouchableOpacity>
+        )}
       </ScrollView>
 
       <NavButton />

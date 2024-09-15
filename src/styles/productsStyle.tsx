@@ -89,6 +89,11 @@ export const AddButton = styled(TouchableOpacity)`
   height: 30px;            
 `;
 
+// Botón "Eliminar" extendido del estilo de "Agregar"
+export const DeleteButton = styled(AddButton)`
+  background-color: red; /* Cambia solo el color de fondo */
+`;
+
 export const RatingContainer = styled.View`
   background-color: #CF9F69;
   width: 50px;

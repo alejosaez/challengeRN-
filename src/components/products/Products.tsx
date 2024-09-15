@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, TouchableOpacity, ScrollView } from 'react-native'
+import { Text, TouchableOpacity, ScrollView, View } from 'react-native'
 import { useAppSelector } from '../../Redux/reduxHook'
 import { RootState } from '../../Redux/store/store'
 import { useNavigation, NavigationProp } from '@react-navigation/native'
@@ -18,10 +18,10 @@ import {
   PlusText,
   RatingContainer,
   RatingText,
+  DeleteButton
 } from '../../styles/productsStyle'
-import { StarIcon } from '../SvgIcons/SvgIcons'
+import { DeleteIcon, EditIcon, StarIcon } from '../SvgIcons/SvgIcons'
 import { Product } from '../../Redux/types/products/productsTypes'
-
 interface ProductsProps {
   products: Product[]
   onEdit?: (product: Product) => void
@@ -101,12 +101,12 @@ const Products: React.FC<ProductsProps> = ({
                 {isEditable && (
                   <>
                     <AddButton onPress={() => onEdit && onEdit(product)}>
-                      <Text>Edit</Text>
+                    <EditIcon width={24} height={24}/>
                     </AddButton>
-                    <AddButton
+                    <DeleteButton
                       onPress={() => onDelete && onDelete(product.product_id)}>
-                      <Text>Delete</Text>
-                    </AddButton>
+                      <DeleteIcon width={24} height={24} />
+                    </DeleteButton>
                   </>
                 )}
               </ProductFooter>

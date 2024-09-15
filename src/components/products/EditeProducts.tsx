@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from 'react'
-import { Alert, Button, Text } from 'react-native'
-import styled from 'styled-components/native'
-import { Picker } from '@react-native-picker/picker'
-import { useAppDispatch, useAppSelector } from '../../Redux/reduxHook'
+import React, { useState, useEffect } from 'react';
+import { Alert, Text } from 'react-native';
+import styled from 'styled-components/native';
+import { Picker } from '@react-native-picker/picker';
+import { useAppDispatch, useAppSelector } from '../../Redux/reduxHook';
 import {
   updateProduct,
   deleteProduct,
-} from '../../Redux/actions/productsAction'
+} from '../../Redux/actions/productsAction';
 import {
   Product,
   CreateProductData,
-} from '../../Redux/types/products/productsTypes'
+} from '../../Redux/types/products/productsTypes';
 
 interface EditProductProps {
-  productId: string
-  onSave: (product: Product) => void
-  onDelete: () => void
+  productId: string;
+  onSave: (product: Product) => void;
+  onDelete: () => void;
 }
 
 const EditProduct: React.FC<EditProductProps> = ({
@@ -23,59 +23,57 @@ const EditProduct: React.FC<EditProductProps> = ({
   onSave,
   onDelete,
 }) => {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   const product = useAppSelector(state =>
     state.product.allProducts.find((p: Product) => p.product_id === productId),
-  )
+  );
 
-  const categories = useAppSelector(state => state.categories.allCategories)
-  const sizesList = useAppSelector(state => state.sizes.allSizes)
+  const categories = useAppSelector(state => state.categories.allCategories);
+  const sizesList = useAppSelector(state => state.sizes.allSizes);
   const combinationsList = useAppSelector(
     state => state.combination.allCombinations,
-  )
+  );
 
-  const [name, setName] = useState('')
-  const [price, setPrice] = useState('')
-  const [description, setDescription] = useState('')
-  const [imageUrl, setImageUrl] = useState('')
-  const [categoryId, setCategoryId] = useState('')
-  const [selectedSizes, setSelectedSizes] = useState<string[]>([])
-  const [selectedCombinations, setSelectedCombinations] = useState<string[]>([])
+  const [name, setName] = useState('');
+  const [price, setPrice] = useState('');
+  const [description, setDescription] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
+  const [categoryId, setCategoryId] = useState('');
+  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
+  const [selectedCombinations, setSelectedCombinations] = useState<string[]>([]);
 
   useEffect(() => {
     if (product) {
-      setName(product.name)
-      setPrice(product.unit_price.toString())
-      setDescription(product.description)
-      setImageUrl(product.image_url)
-      setCategoryId(product.category_id)
-      setSelectedSizes(product.Sizes.map(size => size.size_id))
+      setName(product.name);
+      setPrice(product.unit_price.toString());
+      setDescription(product.description);
+      setImageUrl(product.image_url);
+      setCategoryId(product.category_id);
+      setSelectedSizes(product.Sizes.map(size => size.size_id));
       setSelectedCombinations(
         product.Combinations.map(combination => combination.combination_id),
-      )
+      );
     }
-  }, [product])
+  }, [product]);
 
-  // Función para alternar la selección de tamaños
   const toggleSizeSelection = (sizeId: string) => {
     if (selectedSizes.includes(sizeId)) {
-      setSelectedSizes(selectedSizes.filter(id => id !== sizeId))
+      setSelectedSizes(selectedSizes.filter(id => id !== sizeId));
     } else {
-      setSelectedSizes([...selectedSizes, sizeId])
+      setSelectedSizes([...selectedSizes, sizeId]);
     }
-  }
+  };
 
-  // Función para agregar una combinación
   const handleAddCombination = (combinationId: string) => {
     if (combinationId && !selectedCombinations.includes(combinationId)) {
-      setSelectedCombinations([...selectedCombinations, combinationId])
+      setSelectedCombinations([...selectedCombinations, combinationId]);
     }
-  }
+  };
 
   const handleSave = () => {
     if (!name || !price || !productId) {
-      Alert.alert('Error', 'Please fill out all fields.')
-      return
+      Alert.alert('Error', 'Please fill out all fields.');
+      return;
     }
 
     const updatedProduct: CreateProductData = {
@@ -87,18 +85,18 @@ const EditProduct: React.FC<EditProductProps> = ({
       category_id: categoryId,
       sizes: selectedSizes,
       combinations: selectedCombinations,
-    }
+    };
 
     dispatch(updateProduct(updatedProduct))
       .unwrap()
       .then(updatedProduct => {
-        Alert.alert('Success', 'Product updated successfully!')
-        onSave(updatedProduct) // Llamada al callback con el producto actualizado
+        Alert.alert('Success', 'Product updated successfully!');
+        onSave(updatedProduct);
       })
       .catch(() => {
-        Alert.alert('Error', 'Failed to update product.')
-      })
-  }
+        Alert.alert('Error', 'Failed to update product.');
+      });
+  };
 
   return (
     <StyledScrollView
@@ -169,21 +167,28 @@ const EditProduct: React.FC<EditProductProps> = ({
           </Picker>
         </PickerWrapper>
 
-        <StyledButton title="Save Changes" onPress={handleSave} />
-        <StyledButton title="Delete Product" onPress={onDelete} color="red" />
+        {/* Botones personalizados con borde redondeado */}
+        <ButtonContainer>
+          <RoundedButton onPress={handleSave}>
+            <ButtonText>Save Changes</ButtonText>
+          </RoundedButton>
+          <RoundedButtonDelete onPress={onDelete}>
+            <ButtonText>Delete Product</ButtonText>
+          </RoundedButtonDelete>
+        </ButtonContainer>
       </Container>
     </StyledScrollView>
-  )
-}
+  );
+};
 
 const Container = styled.View`
   flex: 1;
   padding: 20px;
-`
+`;
 
 const StyledScrollView = styled.ScrollView`
   padding: 5px 10px;
-`
+`;
 
 const StyledInput = styled.TextInput`
   border: 1px solid #ccc;
@@ -191,17 +196,17 @@ const StyledInput = styled.TextInput`
   color: #000;
   margin-bottom: 10px;
   padding: 10px;
-`
+`;
 
 const PickerWrapper = styled.View`
   border: 1px solid #ccc;
   border-radius: 10px;
   margin-bottom: 10px;
-`
+`;
 
 const SizeContainer = styled.View`
   margin: 10px 0;
-`
+`;
 
 const SizeButton = styled.TouchableOpacity<{ selected: boolean }>`
   padding: 10px;
@@ -209,10 +214,34 @@ const SizeButton = styled.TouchableOpacity<{ selected: boolean }>`
   border-radius: 5px;
   margin-bottom: 5px;
   background-color: ${({ selected }) => (selected ? '#ddd' : 'transparent')};
-`
+`;
 
-const StyledButton = styled(Button)`
-  margin-top: 10px;
-`
+const ButtonContainer = styled.View`
+  margin-top: 20px;
+  width: 100%;
+`;
 
-export default EditProduct
+// Botón personalizado con borde redondeado
+const RoundedButton = styled.TouchableOpacity`
+  background-color: #007AFF;
+  padding: 15px 20px;
+  border-radius: 25px;
+  align-items: center;
+  margin-bottom: 10px;
+`;
+
+const RoundedButtonDelete = styled.TouchableOpacity`
+  background-color: red;
+  padding: 15px 20px;
+  border-radius: 25px;
+  align-items: center;
+  margin-bottom: 10px;
+`;
+
+const ButtonText = styled.Text`
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+`;
+
+export default EditProduct;
