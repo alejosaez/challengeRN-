@@ -7,28 +7,34 @@ import {
   StyleSheet,
   Image,
   TextInput,
+  ActivityIndicator,
 } from 'react-native';
-import { useAppDispatch, useAppSelector } from '../../Redux/reduxHook';
-import { searchProducts } from '../../Redux/actions/productsAction';
+import { useAppSelector } from '../../Redux/reduxHook';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '../../../App';
-import { ProductSearchResponse } from '../../Redux/types/products/productsTypes';
+import { Product, ProductSearchResponse, Category } from '../../Redux/types/products/productsTypes';
 import SearchIcon from '../../assets/icons/SearchIcon.svg';
 import FilterIcon from '../../assets/icons/FilterIcon.svg';
 
 const SearchComponent: React.FC = () => {
   const [searchText, setSearchText] = useState('');
   const [debouncedSearchText, setDebouncedSearchText] = useState(searchText);
-  const [showResults, setShowResults] = useState(false);
-  const dispatch = useAppDispatch();
-  const products = useAppSelector(
-    (state) => state.product.filteredProducts
-  ) as ProductSearchResponse[];
+  const [filteredProducts, setFilteredProducts] = useState<ProductSearchResponse[]>([]);
+  const [isSearching, setIsSearching] = useState(false); // Nuevo estado para manejar la búsqueda
+
+  // Obtén el estado de los productos y el estado de carga desde Redux
+  const products = useAppSelector((state) => state.product.allProducts) as Product[];
+  const loading = useAppSelector((state) => state.product.loading); // Obtener el estado de carga
+
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
+  // Debounce para optimizar la búsqueda
   useEffect(() => {
+    setIsSearching(true); // Inicia el estado de búsqueda cuando se escribe
+
     const handler = setTimeout(() => {
       setDebouncedSearchText(searchText);
+      setIsSearching(false); // Detiene el estado de búsqueda después del debounce
     }, 300);
 
     return () => {
@@ -36,25 +42,38 @@ const SearchComponent: React.FC = () => {
     };
   }, [searchText]);
 
+  // Filtrado de productos basado en el texto de búsqueda
   useEffect(() => {
     if (debouncedSearchText.trim()) {
-      dispatch(searchProducts(debouncedSearchText));
-      setShowResults(true);
-    } else {
-      setShowResults(false);
-    }
-  }, [debouncedSearchText, dispatch]);
+      const filtered: ProductSearchResponse[] = products
+        .filter((product) =>
+          product.name.toLowerCase().includes(debouncedSearchText.toLowerCase())
+        )
+        .map((product) => ({
+          ...product,
+          Category: {
+            category_id: product.category_id,
+            name: 'Unknown', // Valor por defecto, cambia esto según tus necesidades
+          } as Category,
+        }));
 
+      setFilteredProducts(filtered);
+    } else {
+      setFilteredProducts([]);
+    }
+  }, [debouncedSearchText, products]);
+
+  // Manejar la selección de un producto
   const handleSelectProduct = (productId: string) => {
     setSearchText('');
     setDebouncedSearchText('');
-    setShowResults(false);
-
+    setFilteredProducts([]);
     navigation.navigate('Item', { productId, isEditable: false });
   };
 
   return (
     <View>
+      {/* Barra de búsqueda */}
       <View style={styles.searchBarContainer}>
         <View style={styles.filterIcon}>
           <SearchIcon width={20} height={20} />
@@ -70,26 +89,35 @@ const SearchComponent: React.FC = () => {
         </View>
       </View>
 
-      {showResults && (
+      {/* Contenedor de resultados y cargando */}
+      {searchText.trim() && (
         <View style={styles.resultsContainer}>
-          <FlatList
-            data={products}
-            keyExtractor={(item) => item.product_id}
-            renderItem={({ item }) => (
-              <TouchableOpacity onPress={() => handleSelectProduct(item.product_id)}>
-                <View style={styles.resultItem}>
-                  <Image source={{ uri: item.image_url }} style={styles.productImage} />
-                  <View style={styles.textContainer}>
-                    <Text style={styles.productName}>{item.name}</Text>
-                    <Text style={styles.productCategory}>{item.Category.name}</Text>
+          {/* Mostrar el indicador de carga durante la búsqueda */}
+          {(loading || isSearching) ? (
+            <ActivityIndicator size="large" color="#CF9F69" style={styles.loadingIndicator} />
+          ) : (
+            <FlatList
+              data={filteredProducts}
+              keyExtractor={(item) => item.product_id}
+              renderItem={({ item }) => (
+                <TouchableOpacity onPress={() => handleSelectProduct(item.product_id)}>
+                  <View style={styles.resultItem}>
+                    <Image source={{ uri: item.image_url }} style={styles.productImage} />
+                    <View style={styles.textContainer}>
+                      <Text style={styles.productName}>{item.name}</Text>
+                      <Text style={styles.productCategory}>{item.Category.name}</Text>
+                    </View>
                   </View>
-                </View>
-              </TouchableOpacity>
-            )}
-            ListEmptyComponent={
-              <Text style={styles.emptyText}>No related products found</Text>
-            }
-          />
+                </TouchableOpacity>
+              )}
+              // Muestra el mensaje de "No related products found" solo si la búsqueda ha terminado y no hay resultados
+              ListEmptyComponent={
+                (!loading && !isSearching && debouncedSearchText.trim() && filteredProducts.length === 0) ? (
+                  <Text style={styles.emptyText}>No related products found</Text>
+                ) : null
+              }
+            />
+          )}
         </View>
       )}
     </View>
@@ -127,18 +155,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  filterButton: {
-    backgroundColor: '#CF9F69',
-    width: 45,
-    height: 45,
-    borderRadius: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  filterIconText: {
-    color: '#fff',
-    fontSize: 18,
-  },
   resultsContainer: {
     position: 'absolute',
     top: 67,
@@ -151,6 +167,7 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 8,
     overflow: 'hidden',
+    padding: 10, // Asegura un padding para el contenido
   },
   resultItem: {
     flexDirection: 'row',
@@ -181,6 +198,10 @@ const styles = StyleSheet.create({
     padding: 10,
     textAlign: 'center',
     color: '#777',
+  },
+  loadingIndicator: {
+    alignSelf: 'center', // Centra el indicador de carga
+    marginVertical: 20,
   },
 });
 
