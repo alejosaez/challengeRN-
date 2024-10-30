@@ -3,7 +3,7 @@ import React from 'react';
 // import { createStackNavigator } from '@react-navigation/stack';
 // import { Provider } from 'react-redux';
 // import store from '../ChalengeRM/src/Redux/store/store';
-import HomeScreen from '../ChalengeRM/src/screens/HomeScreen/Home'
+import HomeScreen from './src/screens/HomeScreen/Home';
 // import ItemScreen from '../ChalengeRM/src/screens/ItemScreen/itemScreen'
 
 // export type RootStackParamList = {
