@@ -1,45 +1,43 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import {
-  View,
-  TextInput,
-  Button,
-  StyleSheet,
   Alert,
   Text,
   TouchableOpacity,
   ScrollView,
-} from 'react-native'
-import { Picker } from '@react-native-picker/picker'
-import { useAppDispatch, useAppSelector } from '../../Redux/reduxHook'
-import { createProduct } from '../../Redux/actions/productsAction'
-import { CreateProductData } from '../../Redux/types/products/productsTypes'
+  View,
+} from 'react-native';
+import styled from 'styled-components/native';
+import { Picker } from '@react-native-picker/picker';
+import { useAppDispatch, useAppSelector } from '../../Redux/reduxHook';
+import { createProduct } from '../../Redux/actions/productsAction';
+import { CreateProductData } from '../../Redux/types/products/productsTypes';
 
 interface CreateProductProps {
-  onSave: (product: CreateProductData) => void
+  onSave: (product: CreateProductData) => void;
 }
 
 const CreateProduct: React.FC<CreateProductProps> = ({ onSave }) => {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
-  // Obtener categorías, tamaños y combinaciones del estado de Redux
-  const categories = useAppSelector(state => state.categories.allCategories)
-  const sizesList = useAppSelector(state => state.sizes.allSizes)
+  const categories = useAppSelector(state => state.categories.allCategories);
+  const sizesList = useAppSelector(state => state.sizes.allSizes);
   const combinationsList = useAppSelector(
     state => state.combination.allCombinations,
-  )
+  );
 
-  const [name, setName] = useState('')
-  const [unitPrice, setUnitPrice] = useState('')
-  const [description, setDescription] = useState('')
-  const [imageUrl, setImageUrl] = useState('')
-  const [categoryId, setCategoryId] = useState('')
-  const [selectedSizes, setSelectedSizes] = useState<string[]>([])
-  const [combinations, setCombinations] = useState<string[]>([])
-  const [selectedCombination, setSelectedCombination] = useState<string>('')
+  const [name, setName] = useState('');
+  const [unitPrice, setUnitPrice] = useState('');
+  const [description, setDescription] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
+  const [categoryId, setCategoryId] = useState('');
+  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
+  const [combinations, setCombinations] = useState<string[]>([]);
+  const [selectedCombination, setSelectedCombination] = useState<string>('');
+
   const handleAddProduct = async () => {
     if (!name || !unitPrice) {
-      Alert.alert('Error', 'Please provide both name and unit price.')
-      return
+      Alert.alert('Error', 'Please provide both name and unit price.');
+      return;
     }
     try {
       const newProduct: CreateProductData = {
@@ -50,174 +48,189 @@ const CreateProduct: React.FC<CreateProductProps> = ({ onSave }) => {
         category_id: categoryId,
         sizes: selectedSizes,
         combinations,
-      }
-      await dispatch(createProduct(newProduct)).unwrap()
-      Alert.alert('Success', 'Product added successfully!')
-      onSave(newProduct)
-      setName('')
-      setUnitPrice('')
-      setDescription('')
-      setImageUrl('')
-      setCategoryId('')
-      setSelectedSizes([])
-      setCombinations([])
-      setSelectedCombination('')
+      };
+      await dispatch(createProduct(newProduct)).unwrap();
+      Alert.alert('Success', 'Product added successfully!');
+      onSave(newProduct);
+      setName('');
+      setUnitPrice('');
+      setDescription('');
+      setImageUrl('');
+      setCategoryId('');
+      setSelectedSizes([]);
+      setCombinations([]);
+      setSelectedCombination('');
     } catch (error) {
-      Alert.alert('Error', 'Failed to add product')
+      Alert.alert('Error', 'Failed to add product');
     }
-  }
+  };
 
   const handleAddCombination = (combinationId: string) => {
     if (combinationId && !combinations.includes(combinationId)) {
-      setCombinations([...combinations, combinationId])
+      setCombinations([...combinations, combinationId]);
     }
-  }
+  };
 
   const toggleSizeSelection = (sizeId: string) => {
     if (selectedSizes.includes(sizeId)) {
-      setSelectedSizes(selectedSizes.filter(id => id !== sizeId))
+      setSelectedSizes(selectedSizes.filter(id => id !== sizeId));
     } else {
-      setSelectedSizes([...selectedSizes, sizeId])
+      setSelectedSizes([...selectedSizes, sizeId]);
     }
-  }
+  };
 
   return (
-    <ScrollView
-      contentContainerStyle={styles.scrollViewContent}
-      keyboardShouldPersistTaps="handled">
-      <View style={styles.container}>
-        <TextInput
-          style={styles.input}
+    <StyledScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
+      <Container>
+        <StyledInput
           value={name}
           onChangeText={setName}
           placeholder="Product Name"
         />
-        <TextInput
-          style={styles.input}
+        <StyledInput
           value={unitPrice}
           onChangeText={setUnitPrice}
           placeholder="Unit Price"
           keyboardType="numeric"
         />
-        <TextInput
-          style={styles.input}
+        <StyledInput
           value={description}
           onChangeText={setDescription}
           placeholder="Description"
         />
-        <TextInput
-          style={styles.input}
+        <StyledInput
           value={imageUrl}
           onChangeText={setImageUrl}
           placeholder="Image URL"
         />
 
-        <Picker
-          selectedValue={categoryId}
-          onValueChange={itemValue => setCategoryId(itemValue)}
-          style={styles.input}>
-          <Picker.Item label="Select Category" value="" />
-          {categories.map(category => (
-            <Picker.Item
-              key={category.category_id}
-              label={category.name}
-              value={category.category_id}
-            />
-          ))}
-        </Picker>
+        <PickerWrapper>
+          <Picker
+            selectedValue={categoryId}
+            onValueChange={itemValue => setCategoryId(itemValue)}>
+            <Picker.Item label="Select Category" value="" />
+            {categories.map(category => (
+              <Picker.Item
+                key={category.category_id}
+                label={category.name}
+                value={category.category_id}
+              />
+            ))}
+          </Picker>
+        </PickerWrapper>
 
-        <View style={styles.sizeContainer}>
+        <SizeContainer>
           <Text>Select Sizes:</Text>
           {sizesList.map(size => (
-            <TouchableOpacity
+            <SizeButton
               key={size.size_id}
-              style={[
-                styles.sizeItem,
-                selectedSizes.includes(size.size_id) && styles.selectedSizeItem,
-              ]}
-              onPress={() => toggleSizeSelection(size.size_id)}>
+              onPress={() => toggleSizeSelection(size.size_id)}
+              selected={selectedSizes.includes(size.size_id)}>
               <Text>{size.name}</Text>
-            </TouchableOpacity>
+            </SizeButton>
           ))}
-        </View>
+        </SizeContainer>
 
-        <Picker
-          selectedValue={selectedCombination}
-          onValueChange={itemValue => {
-            setSelectedCombination(itemValue)
-            handleAddCombination(itemValue)
-          }}
-          style={styles.input}
-          mode="dropdown">
-          <Picker.Item label="Select Combination" value="" />
-          {combinationsList.map(combination => (
-            <Picker.Item
-              key={combination.combination_id}
-              label={combination.name}
-              value={combination.combination_id}
-            />
-          ))}
-        </Picker>
+        <PickerWrapper>
+          <Picker
+            selectedValue={selectedCombination}
+            onValueChange={itemValue => {
+              setSelectedCombination(itemValue);
+              handleAddCombination(itemValue);
+            }}>
+            <Picker.Item label="Select Combination" value="" />
+            {combinationsList.map(combination => (
+              <Picker.Item
+                key={combination.combination_id}
+                label={combination.name}
+                value={combination.combination_id}
+              />
+            ))}
+          </Picker>
+        </PickerWrapper>
 
         <View>
           {combinations.map(combinationId => {
             const combination = combinationsList.find(
               c => c.combination_id === combinationId,
-            )
+            );
             return (
               <Text key={combinationId}>
-                {combination?.name} - Additional Price:{' '}
-                {combination?.additional_price}
+                {combination?.name} - Additional Price: {combination?.additional_price}
               </Text>
-            )
+            );
           })}
         </View>
-        <View style={styles.buttonContainer}>
-          <Button title="Add Product" onPress={handleAddProduct} />
-        </View>
-      </View>
-    </ScrollView>
-  )
-}
+        <ButtonContainer>
+          {/* Botón personalizado con borde redondeado */}
+          <RoundedButton onPress={handleAddProduct}>
+            <ButtonText>Add Product</ButtonText>
+          </RoundedButton>
+        </ButtonContainer>
+      </Container>
+    </StyledScrollView>
+  );
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-  },
-  scrollViewContent: {
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    flexGrow: 1,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 10,
-    color: '#000',
-    marginBottom: 10,
-    padding: 10,
-  },
-  sizeContainer: {
-    marginVertical: 10,
-  },
-  sizeItem: {
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    marginBottom: 5,
-  },
-  selectedSizeItem: {
-    backgroundColor: '#ddd',
-    borderRadius: 10,
-  },
-  buttonContainer: {
-    marginVertical: 80,
-    borderTopWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 10,
-    backgroundColor: '#fff',
-  },
-})
+// Definición de los componentes de estilo utilizando styled-components
+const StyledScrollView = styled.ScrollView`
+  padding: 10px;
+`;
 
-export default CreateProduct
+const Container = styled.View`
+  flex: 1;
+  padding: 20px;
+`;
+
+const StyledInput = styled.TextInput`
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 15px;
+  font-size: 16px;
+  color: #000;
+  width: 100%; /* Ajuste el ancho al 100% del contenedor */
+`;
+
+const PickerWrapper = styled.View`
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  padding: 5px;
+  width: 100%; /* Ajuste el ancho al 100% del contenedor */
+`;
+
+const SizeContainer = styled.View`
+  margin-bottom: 15px;
+  width: 100%;
+`;
+
+const SizeButton = styled.TouchableOpacity<{ selected: boolean }>`
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 5px;
+  background-color: ${({ selected }) => (selected ? '#ddd' : 'transparent')};
+`;
+
+const ButtonContainer = styled.View`
+  margin-top: 20px;
+  width: 100%;
+`;
+
+// Botón personalizado con borde redondeado
+const RoundedButton = styled.TouchableOpacity`
+  background-color: #007AFF; /* Color de fondo del botón */
+  padding: 15px 20px;
+  border-radius: 25px; /* Borde redondeado */
+  align-items: center;
+  margin-top: 10px;
+`;
+
+const ButtonText = styled.Text`
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+`;
+
+export default CreateProduct;
