@@ -31,7 +31,7 @@ import {
 import { RootState } from '../../Redux/store/store'
 import SizeSelector from '../../components/SizeSelector/SizeSelector'
 import { Product } from '../../Redux/types/products/productsTypes'
-import { FeedbackIcon } from '../../components/SvgIcons/SvgIcons' // Importar el nuevo ícono
+import { FeedbackIcon } from '../../components/SvgIcons/SvgIcons'
 
 const ItemScreen: React.FC = () => {
   const route = useRoute<RouteProp<RootStackParamList, 'Item'>>()
@@ -43,25 +43,37 @@ const ItemScreen: React.FC = () => {
   const [isEditFormVisible, setIsEditFormVisible] = useState(false)
   const [selectedSizeIndex, setSelectedSizeIndex] = useState(0)
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
+  const [loading, setLoading] = useState(true)
 
-  const allProducts = useAppSelector(
-    (state: RootState) => state.product.allProducts,
-  )
+  const allProducts = useAppSelector((state: RootState) => state.product.allProducts)
+  const allSizes = useAppSelector((state: RootState) => state.sizes.allSizes)
+  const allCombinations = useAppSelector((state: RootState) => state.combination.allCombinations)
 
-  // Buscar el producto específico en allProducts usando productId
+
   const productDetails = useMemo(() => {
     const product = allProducts.find(p => p.product_id === productId)
-    console.log('Detalles del producto seleccionado:', product)
-    return product
-  }, [allProducts, productId])
+    if (!product) return null
+
+   
+    return {
+      ...product,
+      Sizes: product.Sizes && product.Sizes.length > 0 ? product.Sizes : allSizes,
+      Combinations: product.Combinations && product.Combinations.length > 0 ? product.Combinations : allCombinations,
+    }
+  }, [allProducts, productId, allSizes, allCombinations])
 
   useEffect(() => {
     if (!productDetails) {
+      setLoading(true)
       dispatch(getProductsById(productId))
+        .unwrap()
+        .finally(() => setLoading(false))
+    } else {
+      setLoading(false)
     }
   }, [dispatch, productId, productDetails])
 
-  if (!productDetails) {
+  if (loading) {
     return (
       <Container>
         <Text>Loading...</Text>
@@ -69,10 +81,17 @@ const ItemScreen: React.FC = () => {
     )
   }
 
+  if (!productDetails || !productDetails.Sizes || !productDetails.Combinations) {
+    return (
+      <Container>
+        <Text>Error: Product details could not be loaded.</Text>
+      </Container>
+    )
+  }
+
   const selectedSize = productDetails.Sizes[selectedSizeIndex]
   const totalPrice = productDetails.unit_price + selectedSize.additional_price
 
-  // Obtener los nombres de las combinaciones
   const combinationNames = productDetails.Combinations.map(
     combination => combination.name,
   ).join(', ')
@@ -113,25 +132,16 @@ const ItemScreen: React.FC = () => {
               uri: productDetails.image_url,
             }}
           />
-          {/* Contenedor para el título y la combinación */}
           <TitleRowContainer>
-            {/* Fila para el título y el rating */}
             <TitleRatingContainer>
               <ProductTitle>{productDetails.name}</ProductTitle>
               <FeedbackContainer>
                 <FeedbackIcon />
-                <Text
-                  style={{
-                    color: '#FFFFFF',
-                    fontWeight: 'bold',
-                    marginLeft: 4,
-                  }}>
+                <Text style={{ color: '#FFFFFF', fontWeight: 'bold', marginLeft: 4 }}>
                   4.9
                 </Text>
               </FeedbackContainer>
             </TitleRatingContainer>
-
-            {/* Descripción debajo de la fila del título y el rating */}
             <CombinationText>{combinationNames}</CombinationText>
           </TitleRowContainer>
         </View>
