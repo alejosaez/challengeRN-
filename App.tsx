@@ -7,7 +7,7 @@ import HomeScreen from './src/screens/HomeScreen/Home'
 import ItemScreen from './src/screens/ItemScreen/itemScreen'
 import PersonScreen from './src/screens/PersonScreen/Person'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import './src/GoogleSignInConfig'  
+// import './src/GoogleSignInConfig'  
 export type RootStackParamList = {
   Home: undefined
   Item: { productId: string; isEditable?: boolean }

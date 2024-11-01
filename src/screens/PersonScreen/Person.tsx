@@ -6,7 +6,7 @@ import EditProducts from '../../components/products/EditeProducts';
 import Products from '../../components/products/Products';
 import { Product, CreateProductData } from '../../Redux/types/products/productsTypes';
 import { useAppSelector, useAppDispatch } from '../../Redux/reduxHook';
-import { deleteProduct, createProduct } from '../../Redux/actions/productsAction'; // Removed updateProduct
+import { deleteProduct } from '../../Redux/actions/productsAction';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '../../../App';
 
@@ -18,7 +18,7 @@ const PersonScreen: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [showProducts, setShowProducts] = useState(false);
 
-  const products = useAppSelector((state) => state.product.allProducts);
+  const [products, setProducts] = useState<Product[]>(useAppSelector((state) => state.product.allProducts));
 
   const handleEditProducts = () => {
     if (showProducts) {
@@ -41,25 +41,27 @@ const PersonScreen: React.FC = () => {
     setShowProducts(false);
   };
 
-  // Remover lógica de actualización desde aquí
-  const createNewProduct = (productData: CreateProductData) => {
-    dispatch(createProduct(productData))
-      .unwrap()
-      .then(() => {
-        Alert.alert('Success', 'Product created successfully!');
-        setShowForm(false);
-        setShowProducts(true);
-      })
-      .catch(() => {
-        Alert.alert('Error', 'Failed to create product.');
-      });
-  };
+  
+  const handleSaveProduct = (newProductData: CreateProductData) => {
+  
+    const newProduct: Product = {
+      ...newProductData,
+      product_id: Math.random().toString(), 
+      Sizes: [], 
+      Combinations: [],
+    };
+    setProducts([...products, newProduct]);
+    Alert.alert('Success', 'Product created successfully!');
+    setShowForm(false);
+    setShowProducts(true);
+  }
 
   const deleteProductHandler = (productId: string) => {
     dispatch(deleteProduct(productId))
       .unwrap()
       .then(() => {
         Alert.alert('Success', 'Product deleted successfully!');
+        setProducts(products.filter(product => product.product_id !== productId)); 
         setShowForm(false);
         setShowProducts(true);
       })
@@ -108,7 +110,9 @@ const PersonScreen: React.FC = () => {
     
       {showForm && !isEditing && (
         <StyledScrollView keyboardShouldPersistTaps="handled">
-          <CreateProduct onSave={createNewProduct} />
+          <CreateProduct 
+            onSave={handleSaveProduct} 
+          />
         </StyledScrollView>
       )}
     </Container>
@@ -139,5 +143,6 @@ const ButtonText = styled.Text`
   font-size: 16px;
   font-weight: bold;
 `;
+
 
 export default PersonScreen;

@@ -172,7 +172,6 @@ const CreateProduct: React.FC<CreateProductProps> = ({ onSave }) => {
   );
 };
 
-// Definición de los componentes de estilo utilizando styled-components
 const StyledScrollView = styled.ScrollView`
   padding: 10px;
 `;
@@ -189,7 +188,7 @@ const StyledInput = styled.TextInput`
   margin-bottom: 15px;
   font-size: 16px;
   color: #000;
-  width: 100%; /* Ajuste el ancho al 100% del contenedor */
+  width: 100%; 
 `;
 
 const PickerWrapper = styled.View`
@@ -197,7 +196,7 @@ const PickerWrapper = styled.View`
   border-radius: 8px;
   margin-bottom: 15px;
   padding: 5px;
-  width: 100%; /* Ajuste el ancho al 100% del contenedor */
+  width: 100%; 
 `;
 
 const SizeContainer = styled.View`
@@ -218,11 +217,10 @@ const ButtonContainer = styled.View`
   width: 100%;
 `;
 
-// Botón personalizado con borde redondeado
 const RoundedButton = styled.TouchableOpacity`
-  background-color: #007AFF; /* Color de fondo del botón */
+  background-color: #007AFF; 
   padding: 15px 20px;
-  border-radius: 25px; /* Borde redondeado */
+  border-radius: 25px; 
   align-items: center;
   margin-top: 10px;
 `;

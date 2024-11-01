@@ -18,14 +18,14 @@ const Categories: React.FC<CategoriesProps> = ({ categories, onSelectCategory })
   };
 
   const renderCategoryIcon = (name: string, active: boolean) => {
-    const iconColor = active ? '#FFFFFF' : '#382E1E';
+    const iconColor = active ? '#fff' : '#382E1E';
     
     switch (name.toLowerCase()) {
-      case 'capuchino':
+      case 'coffee':
         return <CappuccinoIcon width={15} height={15} fill={iconColor} />;
       case 'cold brew':
         return <ColdBrewIcon width={15} height={15} fill={iconColor} />;
-      case 'expresso':
+      case 'espresso':
         return <EspressoIcon width={15} height={15} fill={iconColor} />;
       default:
         return null;
