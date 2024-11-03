@@ -22,12 +22,13 @@ import SearchBar from '../../components/SearchBar/SearchBar'
 import Categories from '../../components/Category/Category'
 import Products from '../../components/products/Products'
 import { RootStackParamList } from '../../../App'
-// import { LoginButton } from '../../auth0/loginButton'
+import { LoginButton, LogoutButton } from '../../auth0/loginButton'
 import { getSizes } from '../../Redux/actions/sizeAction'
 import { getCombination } from '../../Redux/actions/combinationsAction'
 import { getProducts } from '../../Redux/actions/productsAction'
 import NotificationIcon from '../../assets/icons/NotificationIcon.svg' // Icono de notificación SVG
 import SpecialOfferCard from '../../components/Special Offer/Special Offer'
+import { Profile } from '../../auth0/user'
 
 const HomeScreen: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -73,6 +74,9 @@ const HomeScreen: React.FC = () => {
         </Row>
       </Header>
       <Greeting>Good evening, Monica</Greeting>
+      <LoginButton />
+      <LogoutButton />
+      <Profile />
       <SearchBar />
 
       <CategoriesTitle>Categories</CategoriesTitle>

@@ -3373,6 +3373,7 @@ __metadata:
     prettier: ^3.3.3
     react: 18.2.0
     react-native: 0.74.4
+    react-native-auth0: ^3.2.1
     react-native-gesture-handler: ^2.18.1
     react-native-reanimated: ^3.15.0
     react-native-safe-area-context: ^4.10.8
@@ -3863,6 +3864,13 @@ __metadata:
   version: 1.0.2
   resolution: "balanced-match@npm:1.0.2"
   checksum: 9706c088a283058a8a99e0bf91b0a2f75497f185980d9ffa8b304de1d9e58ebda7c72c07ebf01dadedaac5b2907b2c6f566f660d62bd336c3468e960403b9d65
+  languageName: node
+  linkType: hard
+
+"base-64@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "base-64@npm:0.1.0"
+  checksum: 5a42938f82372ab5392cbacc85a5a78115cbbd9dbef9f7540fa47d78763a3a8bd7d598475f0d92341f66285afd377509851a9bb5c67bbecb89686e9255d5b3eb
   languageName: node
   linkType: hard
 
@@ -7239,6 +7247,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jwt-decode@npm:^3.1.2":
+  version: 3.1.2
+  resolution: "jwt-decode@npm:3.1.2"
+  checksum: 20a4b072d44ce3479f42d0d2c8d3dabeb353081ba4982e40b83a779f2459a70be26441be6c160bfc8c3c6eadf9f6380a036fbb06ac5406b5674e35d8c4205eeb
+  languageName: node
+  linkType: hard
+
 "keyv@npm:^4.5.4":
   version: 4.5.4
   resolution: "keyv@npm:4.5.4"
@@ -8521,6 +8536,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"prettier-quick@npm:^0.0.5":
+  version: 0.0.5
+  resolution: "prettier-quick@npm:0.0.5"
+  checksum: 31b6117dfa5e9e5585949e7c358faddbbe07320eba4e87d7db0ae943861288a8e703a9da81c1da0395233f49297489376876ef84324d06e37f7beae4a07bd89c
+  languageName: node
+  linkType: hard
+
 "prettier@npm:^3.3.3":
   version: 3.3.3
   resolution: "prettier@npm:3.3.3"
@@ -8614,6 +8636,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"punycode@npm:^1.4.1":
+  version: 1.4.1
+  resolution: "punycode@npm:1.4.1"
+  checksum: fa6e698cb53db45e4628559e557ddaf554103d2a96a1d62892c8f4032cd3bc8871796cae9eabc1bc700e2b6677611521ce5bb1d9a27700086039965d0cf34518
+  languageName: node
+  linkType: hard
+
 "punycode@npm:^2.1.0":
   version: 2.3.1
   resolution: "punycode@npm:2.3.1"
@@ -8625,6 +8654,15 @@ __metadata:
   version: 6.1.0
   resolution: "pure-rand@npm:6.1.0"
   checksum: 8d53bc02bed99eca0b65b505090152ee7e9bd67dd74f8ff32ba1c883b87234067c5bf68d2614759fb217d82594d7a92919e6df80f97885e7b12b42af4bd3316a
+  languageName: node
+  linkType: hard
+
+"qs@npm:^6.12.3":
+  version: 6.13.0
+  resolution: "qs@npm:6.13.0"
+  dependencies:
+    side-channel: ^1.0.6
+  checksum: e9404dc0fc2849245107108ce9ec2766cde3be1b271de0bf1021d049dc5b98d1a2901e67b431ac5509f865420a7ed80b7acb3980099fe1c118a1c5d2e1432ad8
   languageName: node
   linkType: hard
 
@@ -8707,6 +8745,26 @@ __metadata:
   version: 17.0.2
   resolution: "react-is@npm:17.0.2"
   checksum: 9d6d111d8990dc98bc5402c1266a808b0459b5d54830bbea24c12d908b536df7883f268a7868cfaedde3dd9d4e0d574db456f84d2e6df9c4526f99bb4b5344d8
+  languageName: node
+  linkType: hard
+
+"react-native-auth0@npm:^3.2.1":
+  version: 3.2.1
+  resolution: "react-native-auth0@npm:3.2.1"
+  dependencies:
+    base-64: ^0.1.0
+    jwt-decode: ^3.1.2
+    prettier-quick: ^0.0.5
+    prop-types: ^15.8.1
+    url: ^0.11.0
+  peerDependencies:
+    expo: ">=48.0.0"
+    react: ^16.11.0 || ^17 || ^18
+    react-native: ">=0.65.0 <1.0.x"
+  peerDependenciesMeta:
+    expo:
+      optional: true
+  checksum: 133bf17706fbfe53606fba4b5b3de0fea6c2e0607aaa17b94d8e733a24f967100c0d21231907064dfb97a98edfecd18781b3176e457d7e1a59d89e92eb0a9bc8
   languageName: node
   linkType: hard
 
@@ -10316,6 +10374,16 @@ __metadata:
   dependencies:
     punycode: ^2.1.0
   checksum: 7167432de6817fe8e9e0c9684f1d2de2bb688c94388f7569f7dbdb1587c9f4ca2a77962f134ec90be0cc4d004c939ff0d05acc9f34a0db39a3c797dada262633
+  languageName: node
+  linkType: hard
+
+"url@npm:^0.11.0":
+  version: 0.11.4
+  resolution: "url@npm:0.11.4"
+  dependencies:
+    punycode: ^1.4.1
+    qs: ^6.12.3
+  checksum: c25e587723d343d5d4248892393bfa5039ded9c2c07095a9d005bc64b7cb8956d623c0d8da8d1a28f71986a7a8d80fc2e9f9cf84235e48fa435a5cb4451062c6
   languageName: node
   linkType: hard
 

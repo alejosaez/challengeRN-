@@ -7,7 +7,7 @@ import HomeScreen from './src/screens/HomeScreen/Home'
 import ItemScreen from './src/screens/ItemScreen/itemScreen'
 import PersonScreen from './src/screens/PersonScreen/Person'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-// import './src/GoogleSignInConfig'  
+import {useAuth0, Auth0Provider} from 'react-native-auth0';
 export type RootStackParamList = {
   Home: undefined
   Item: { productId: string; isEditable?: boolean }
@@ -19,7 +19,9 @@ const Stack = createStackNavigator<RootStackParamList>()
 const Tab = createBottomTabNavigator();
 const App: React.FC = () => {
   return (
-      <Provider store={store}>
+    
+        <Auth0Provider domain={"dev-mndp4go1gv647z2l.us.auth0.com"} clientId={"NnolM66iQz76oLa3D929xQhTAIVTXyTU"}>
+    <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator>
             <Stack.Screen name="Home" component={HomeScreen} />
@@ -28,6 +30,7 @@ const App: React.FC = () => {
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>
+      </Auth0Provider>
   )
 }
 
