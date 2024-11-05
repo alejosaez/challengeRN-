@@ -45,20 +45,26 @@ const ItemScreen: React.FC = () => {
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
   const [loading, setLoading] = useState(true)
 
-  const allProducts = useAppSelector((state: RootState) => state.product.allProducts)
+  const allProducts = useAppSelector(
+    (state: RootState) => state.product.allProducts,
+  )
   const allSizes = useAppSelector((state: RootState) => state.sizes.allSizes)
-  const allCombinations = useAppSelector((state: RootState) => state.combination.allCombinations)
-
+  const allCombinations = useAppSelector(
+    (state: RootState) => state.combination.allCombinations,
+  )
 
   const productDetails = useMemo(() => {
     const product = allProducts.find(p => p.product_id === productId)
     if (!product) return null
 
-   
     return {
       ...product,
-      Sizes: product.Sizes && product.Sizes.length > 0 ? product.Sizes : allSizes,
-      Combinations: product.Combinations && product.Combinations.length > 0 ? product.Combinations : allCombinations,
+      Sizes:
+        product.Sizes && product.Sizes.length > 0 ? product.Sizes : allSizes,
+      Combinations:
+        product.Combinations && product.Combinations.length > 0
+          ? product.Combinations
+          : allCombinations,
     }
   }, [allProducts, productId, allSizes, allCombinations])
 
@@ -81,7 +87,11 @@ const ItemScreen: React.FC = () => {
     )
   }
 
-  if (!productDetails || !productDetails.Sizes || !productDetails.Combinations) {
+  if (
+    !productDetails ||
+    !productDetails.Sizes ||
+    !productDetails.Combinations
+  ) {
     return (
       <Container>
         <Text>Error: Product details could not be loaded.</Text>
@@ -137,7 +147,12 @@ const ItemScreen: React.FC = () => {
               <ProductTitle>{productDetails.name}</ProductTitle>
               <FeedbackContainer>
                 <FeedbackIcon />
-                <Text style={{ color: '#FFFFFF', fontWeight: 'bold', marginLeft: 4 }}>
+                <Text
+                  style={{
+                    color: '#FFFFFF',
+                    fontWeight: 'bold',
+                    marginLeft: 4,
+                  }}>
                   4.9
                 </Text>
               </FeedbackContainer>

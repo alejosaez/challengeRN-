@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 import {
   Text,
   View,
@@ -8,68 +8,78 @@ import {
   Image,
   TextInput,
   ActivityIndicator,
-} from 'react-native';
-import { useAppSelector } from '../../Redux/reduxHook';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
-import { RootStackParamList } from '../../../App';
-import { Product, ProductSearchResponse, Category } from '../../Redux/types/products/productsTypes';
-import SearchIcon from '../../assets/icons/SearchIcon.svg';
-import FilterIcon from '../../assets/icons/FilterIcon.svg';
+} from 'react-native'
+import { useAppSelector } from '../../Redux/reduxHook'
+import { useNavigation, NavigationProp } from '@react-navigation/native'
+import { RootStackParamList } from '../../../App'
+import {
+  Product,
+  ProductSearchResponse,
+  Category,
+} from '../../Redux/types/products/productsTypes'
+import SearchIcon from '../../assets/icons/SearchIcon.svg'
+import FilterIcon from '../../assets/icons/FilterIcon.svg'
 
 const SearchComponent: React.FC = () => {
-  const [searchText, setSearchText] = useState('');
-  const [debouncedSearchText, setDebouncedSearchText] = useState(searchText);
-  const [filteredProducts, setFilteredProducts] = useState<ProductSearchResponse[]>([]);
-  const [isSearching, setIsSearching] = useState(false); // Nuevo estado para manejar la búsqueda
+  const [searchText, setSearchText] = useState('')
+  const [debouncedSearchText, setDebouncedSearchText] = useState(searchText)
+  const [filteredProducts, setFilteredProducts] = useState<
+    ProductSearchResponse[]
+  >([])
+  const [isSearching, setIsSearching] = useState(false) // Nuevo estado para manejar la búsqueda
 
   // Obtén el estado de los productos y el estado de carga desde Redux
-  const products = useAppSelector((state) => state.product.allProducts) as Product[];
-  const loading = useAppSelector((state) => state.product.loading); // Obtener el estado de carga
+  const products = useAppSelector(
+    state => state.product.allProducts,
+  ) as Product[]
+  const loading = useAppSelector(state => state.product.loading) // Obtener el estado de carga
 
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>()
 
   // Debounce para optimizar la búsqueda
   useEffect(() => {
-    setIsSearching(true); // Inicia el estado de búsqueda cuando se escribe
+    setIsSearching(true) // Inicia el estado de búsqueda cuando se escribe
 
     const handler = setTimeout(() => {
-      setDebouncedSearchText(searchText);
-      setIsSearching(false); // Detiene el estado de búsqueda después del debounce
-    }, 300);
+      setDebouncedSearchText(searchText)
+      setIsSearching(false) // Detiene el estado de búsqueda después del debounce
+    }, 300)
 
     return () => {
-      clearTimeout(handler);
-    };
-  }, [searchText]);
+      clearTimeout(handler)
+    }
+  }, [searchText])
 
   // Filtrado de productos basado en el texto de búsqueda
   useEffect(() => {
     if (debouncedSearchText.trim()) {
       const filtered: ProductSearchResponse[] = products
-        .filter((product) =>
-          product.name.toLowerCase().includes(debouncedSearchText.toLowerCase())
+        .filter(product =>
+          product.name
+            .toLowerCase()
+            .includes(debouncedSearchText.toLowerCase()),
         )
-        .map((product) => ({
+        .map(product => ({
           ...product,
           Category: {
             category_id: product.category_id,
             name: 'Unknown', // Valor por defecto, cambia esto según tus necesidades
           } as Category,
-        }));
+        }))
 
-      setFilteredProducts(filtered);
+      setFilteredProducts(filtered)
     } else {
-      setFilteredProducts([]);
+      setFilteredProducts([])
     }
-  }, [debouncedSearchText, products]);
+  }, [debouncedSearchText, products])
 
   // Manejar la selección de un producto
   const handleSelectProduct = (productId: string) => {
-    setSearchText('');
-    setDebouncedSearchText('');
-    setFilteredProducts([]);
-    navigation.navigate('Item', { productId, isEditable: false });
-  };
+    setSearchText('')
+    setDebouncedSearchText('')
+    setFilteredProducts([])
+    navigation.navigate('Item', { productId, isEditable: false })
+  }
 
   return (
     <View>
@@ -93,27 +103,42 @@ const SearchComponent: React.FC = () => {
       {searchText.trim() && (
         <View style={styles.resultsContainer}>
           {/* Mostrar el indicador de carga durante la búsqueda */}
-          {(loading || isSearching) ? (
-            <ActivityIndicator size="large" color="#CF9F69" style={styles.loadingIndicator} />
+          {loading || isSearching ? (
+            <ActivityIndicator
+              size="large"
+              color="#CF9F69"
+              style={styles.loadingIndicator}
+            />
           ) : (
             <FlatList
               data={filteredProducts}
-              keyExtractor={(item) => item.product_id}
+              keyExtractor={item => item.product_id}
               renderItem={({ item }) => (
-                <TouchableOpacity onPress={() => handleSelectProduct(item.product_id)}>
+                <TouchableOpacity
+                  onPress={() => handleSelectProduct(item.product_id)}>
                   <View style={styles.resultItem}>
-                    <Image source={{ uri: item.image_url }} style={styles.productImage} />
+                    <Image
+                      source={{ uri: item.image_url }}
+                      style={styles.productImage}
+                    />
                     <View style={styles.textContainer}>
                       <Text style={styles.productName}>{item.name}</Text>
-                      <Text style={styles.productCategory}>{item.Category.name}</Text>
+                      <Text style={styles.productCategory}>
+                        {item.Category.name}
+                      </Text>
                     </View>
                   </View>
                 </TouchableOpacity>
               )}
               // Muestra el mensaje de "No related products found" solo si la búsqueda ha terminado y no hay resultados
               ListEmptyComponent={
-                (!loading && !isSearching && debouncedSearchText.trim() && filteredProducts.length === 0) ? (
-                  <Text style={styles.emptyText}>No related products found</Text>
+                !loading &&
+                !isSearching &&
+                debouncedSearchText.trim() &&
+                filteredProducts.length === 0 ? (
+                  <Text style={styles.emptyText}>
+                    No related products found
+                  </Text>
                 ) : null
               }
             />
@@ -121,8 +146,8 @@ const SearchComponent: React.FC = () => {
         </View>
       )}
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   searchBarContainer: {
@@ -203,6 +228,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center', // Centra el indicador de carga
     marginVertical: 20,
   },
-});
+})
 
-export default SearchComponent;
+export default SearchComponent

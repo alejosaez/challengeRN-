@@ -1,19 +1,29 @@
-import React from 'react';
-import { Text } from 'react-native';
-import { useAuth0 } from 'react-native-auth0';
+import React, { useEffect, useState } from 'react'
+import { useAuth0 } from 'react-native-auth0'
+import { Greeting } from '../styles/homeStyle'
+
+const getGreeting = () => {
+  const hours = new Date().getHours()
+  if (hours < 12) return 'Good morning'
+  if (hours < 18) return 'Good afternoon'
+  return 'Good evening'
+}
 
 export const Profile = () => {
-  const { user } = useAuth0();
-  
-  console.log("soy usuario", user); // Aquí es donde se registra el usuario
+  const { user } = useAuth0()
+  const [greeting, setGreeting] = useState<string>(getGreeting())
+
+  useEffect(() => {
+    setGreeting(getGreeting()) // Actualiza el saludo en base a la hora
+  }, [])
 
   return (
     <>
       {user ? (
-        <Text>Bienvenido, {user.name}</Text>
+        <Greeting>{`${greeting}, ${user.name}`}</Greeting> // Aplica el estilo
       ) : (
-        <Text>No has iniciado sesión</Text>
+        <Greeting>You Are Not Logged In</Greeting>
       )}
     </>
-  );
-};
+  )
+}

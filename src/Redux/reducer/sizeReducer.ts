@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Size, SizeState } from '../types/size/sizeType'
-import { getSizes } from '../actions/sizeAction' 
+import { getSizes } from '../actions/sizeAction'
 
 const initialState: SizeState = {
   allSizes: [],

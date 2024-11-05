@@ -77,17 +77,17 @@ export interface ProductState {
 }
 
 export interface Category {
-  category_id: string;
-  name: string;
+  category_id: string
+  name: string
 }
 
 export interface ProductSearchResponse {
-  product_id: string;
-  name: string;
-  unit_price: number;
-  description: string;
-  image_url: string;
-  Category: Category; // Objeto de categoría en lugar de solo ID
-  Sizes: Size[];
-  Combinations: Combination[];
+  product_id: string
+  name: string
+  unit_price: number
+  description: string
+  image_url: string
+  Category: Category // Objeto de categoría en lugar de solo ID
+  Sizes: Size[]
+  Combinations: Combination[]
 }
