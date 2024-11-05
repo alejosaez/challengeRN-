@@ -18,7 +18,7 @@ import {
   PlusText,
   RatingContainer,
   RatingText,
-  DeleteButton
+  DeleteButton,
 } from '../../styles/productsStyle'
 import { DeleteIcon, EditIcon, StarIcon } from '../SvgIcons/SvgIcons'
 import { Product } from '../../Redux/types/products/productsTypes'
@@ -65,8 +65,7 @@ const Products: React.FC<ProductsProps> = ({
     <ScrollView
       horizontal={true}
       showsHorizontalScrollIndicator={false}
-      contentContainerStyle={{ paddingHorizontal: 10 }}
-    >
+      contentContainerStyle={{ paddingHorizontal: 10 }}>
       {products.map((product: Product) => (
         <TouchableOpacity
           key={product.product_id}
@@ -101,7 +100,7 @@ const Products: React.FC<ProductsProps> = ({
                 {isEditable && (
                   <>
                     <AddButton onPress={() => onEdit && onEdit(product)}>
-                    <EditIcon width={24} height={24}/>
+                      <EditIcon width={24} height={24} />
                     </AddButton>
                     <DeleteButton
                       onPress={() => onDelete && onDelete(product.product_id)}>
